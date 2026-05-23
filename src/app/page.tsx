@@ -107,65 +107,30 @@ export default function HomePage() {
     <div>
 
       {/* ══ HERO ══ */}
-      <section style={{ padding: "80px 0 96px" }}>
-        <div className="wrap">
-          <div className="hero-grid">
-            <div>
-              <Reveal>
-                <p className="eyebrow">Premium B2B Lead Generation</p>
-              </Reveal>
-              <Reveal delay={0.05}>
-                <h1 style={{ marginBottom: 24 }}>
-                  Quality Leads.<br />Real Growth.
-                </h1>
-              </Reveal>
-              <Reveal delay={0.1}>
-                <p style={{ fontSize: 18, lineHeight: 1.65, color: "var(--color-muted)", maxWidth: 460, marginBottom: 40 }}>
-                  We help established B2B companies build consistent, high-quality pipelines — so your sales team can focus on closing, not chasing.
-                </p>
-              </Reveal>
-              <Reveal delay={0.14}>
-                <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                  <Link href="/contact" className="btn btn-dark btn-lg">Book a discovery call</Link>
-                  <Link href="/how-it-works" className="btn btn-outline btn-lg">See how it works</Link>
-                </div>
-              </Reveal>
-            </div>
-
-            {/* Arch visual */}
-            <div style={{ display: "flex", justifyContent: "flex-end" }} className="hero-arch-wrap">
-              <Reveal delay={0.2}>
-                <div style={{
-                  width: "100%",
-                  maxWidth: 420,
-                  aspectRatio: "3/4",
-                  borderRadius: "260px 260px 32px 32px",
-                  background: "oklch(76% 0.062 55)",
-                  position: "relative",
-                  overflow: "hidden",
-                }}>
-                  <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
-                    <svg viewBox="0 0 240 360" fill="none" style={{ width: "65%", marginBottom: -8 }} xmlns="http://www.w3.org/2000/svg">
-                      <path d="M120 358 C118 300 112 240 100 170 C92 120 85 80 75 40" stroke="oklch(32% 0.055 55)" strokeWidth="2.5" strokeLinecap="round"/>
-                      <path d="M102 175 C80 155 55 138 30 125" stroke="oklch(32% 0.055 55)" strokeWidth="1.8" strokeLinecap="round"/>
-                      <ellipse cx="50" cy="140" rx="28" ry="14" fill="oklch(46% 0.085 95)" opacity="0.85" transform="rotate(-25 50 140)"/>
-                      <ellipse cx="70" cy="128" rx="22" ry="11" fill="oklch(52% 0.090 95)" opacity="0.8" transform="rotate(-20 70 128)"/>
-                      <path d="M108 220 C132 200 158 188 182 178" stroke="oklch(32% 0.055 55)" strokeWidth="1.8" strokeLinecap="round"/>
-                      <ellipse cx="162" cy="186" rx="28" ry="12" fill="oklch(48% 0.088 92)" opacity="0.8" transform="rotate(20 162 186)"/>
-                      <ellipse cx="182" cy="178" rx="20" ry="10" fill="oklch(54% 0.092 92)" opacity="0.75" transform="rotate(15 182 178)"/>
-                      <path d="M95 255 C72 240 48 228 24 220" stroke="oklch(32% 0.055 55)" strokeWidth="1.6" strokeLinecap="round"/>
-                      <ellipse cx="44" cy="228" rx="26" ry="11" fill="oklch(44% 0.082 95)" opacity="0.75" transform="rotate(-30 44 228)"/>
-                      <path d="M90 120 C72 100 58 75 48 48" stroke="oklch(32% 0.055 55)" strokeWidth="1.4" strokeLinecap="round"/>
-                      <ellipse cx="55" cy="68" rx="18" ry="9" fill="oklch(50% 0.086 95)" opacity="0.7" transform="rotate(-35 55 68)"/>
-                      <ellipse cx="72" cy="88" rx="15" ry="8" fill="oklch(48% 0.084 95)" opacity="0.75" transform="rotate(-28 72 88)"/>
-                      <path d="M88 358 C84 340 76 328 76 320 L164 320 C164 328 156 340 152 358 Z" fill="oklch(68% 0.090 44)"/>
-                      <path d="M72 320 L168 320 L162 312 L78 312 Z" fill="oklch(74% 0.095 46)"/>
-                      <ellipse cx="120" cy="312" rx="44" ry="6" fill="oklch(78% 0.085 48)"/>
-                    </svg>
-                  </div>
-                </div>
-              </Reveal>
-            </div>
+      <section className="hero-video-section">
+        {/* Full-bleed background video */}
+        <video
+          src="/hero-handshake.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="hero-video-bg"
+        />
+        {/* Gradient scrim so text is legible */}
+        <div className="hero-video-scrim" />
+        {/* Text overlay */}
+        <div className="wrap hero-video-content">
+          <p className="eyebrow eyebrow-light">Premium B2B Lead Generation</p>
+          <h1 className="hero-video-h1">
+            Quality Leads.<br />Real Growth.
+          </h1>
+          <p className="hero-video-sub">
+            We help established B2B companies build consistent, high-quality pipelines — so your sales team can focus on closing, not chasing.
+          </p>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <Link href="/contact" className="btn btn-warm btn-lg">Book a discovery call</Link>
+            <Link href="/how-it-works" className="btn btn-ghost-light btn-lg">See how it works</Link>
           </div>
         </div>
       </section>
@@ -511,12 +476,78 @@ export default function HomePage() {
           gap: 48px;
           align-items: center;
         }
-        @media (max-width: 900px) {
-          .hero-grid { grid-template-columns: 1fr; gap: 48px; }
-          .hero-arch-wrap { display: none; }
-          .services-grid { grid-template-columns: 1fr 1fr; }
+        /* ── Full-bleed video hero ── */
+        .hero-video-section {
+          position: relative;
+          min-height: 92vh;
+          display: flex;
+          align-items: center;
+          overflow: hidden;
+        }
+        .hero-video-bg {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center center;
+          z-index: 0;
+        }
+        .hero-video-scrim {
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          background: linear-gradient(
+            to right,
+            oklch(12% 0.025 55 / 0.78) 0%,
+            oklch(12% 0.025 55 / 0.55) 45%,
+            oklch(12% 0.025 55 / 0.10) 75%,
+            transparent 100%
+          );
+        }
+        .hero-video-content {
+          position: relative;
+          z-index: 2;
+          padding-top: 100px;
+          padding-bottom: 100px;
+          max-width: 620px;
+        }
+        .eyebrow-light {
+          color: oklch(85% 0.08 55) !important;
+        }
+        .hero-video-h1 {
+          font-family: var(--font-serif), 'Iowan Old Style', Georgia, serif;
+          font-size: clamp(52px, 6vw, 88px);
+          font-weight: 900;
+          letter-spacing: -0.03em;
+          line-height: 1.0;
+          color: #fff;
+          margin-bottom: 28px;
+        }
+        .hero-video-sub {
+          font-size: 18px;
+          line-height: 1.65;
+          color: oklch(90% 0.015 55);
+          max-width: 480px;
+          margin-bottom: 40px;
+        }
+        .btn-ghost-light {
+          background: transparent;
+          border: 1.5px solid oklch(100% 0 0 / 0.5);
+          color: #fff;
+          transition: background 0.2s, border-color 0.2s;
+        }
+        .btn-ghost-light:hover {
+          background: oklch(100% 0 0 / 0.12);
+          border-color: oklch(100% 0 0 / 0.8);
         }
         @media (max-width: 768px) {
+          .hero-video-section { min-height: 80vh; }
+          .hero-video-content { max-width: 100%; }
+          .hero-video-scrim {
+            background: oklch(12% 0.025 55 / 0.65);
+          }
+          .services-grid { grid-template-columns: 1fr 1fr; }
           .steps-grid { grid-template-columns: 1fr; gap: 40px; }
           .testi-grid { grid-template-columns: 1fr; gap: 36px; }
           .cta-dark-grid { grid-template-columns: 1fr; }
