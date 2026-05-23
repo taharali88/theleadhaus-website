@@ -12,32 +12,32 @@ const processSteps = [
   {
     num: "Step 01",
     title: "Discovery & alignment",
-    body: "We start by understanding your business deeply — your product, value proposition, existing customers, deal sizes, and where your best historical wins came from. No templates. No copy-paste strategy.",
+    body: "We start by understanding your business deeply — your product, value proposition, existing customers, deal sizes, and where your best historical wins came from. No templates. No copy paste strategy.",
     detail: "In week one we run a structured intake session with your commercial leadership. We map your competitive landscape, review your existing pipeline data, and benchmark your current conversion rates. This becomes the intelligence layer for everything that follows.",
   },
   {
     num: "Step 02",
     title: "ICP mapping & list build",
     body: "We define your ideal customer profile with precision — industry, headcount band, revenue range, tech stack, buying signals, and organisational trigger events that indicate readiness to purchase.",
-    detail: "We build verified, GDPR-compliant contact lists using a combination of proprietary data sources, LinkedIn Sales Navigator, and manual research. Every contact is validated before it enters a sequence. We do not buy lists.",
+    detail: "We build verified, GDPR compliant contact lists using a combination of proprietary data sources, LinkedIn Sales Navigator, and manual research. Every contact is validated before it enters a sequence. We do not buy lists.",
   },
   {
     num: "Step 03",
     title: "Messaging & positioning",
     body: 'We write bespoke copy for every channel — email, LinkedIn, and phone scripts. The messaging is grounded in your buyer\'s world, not generic templates about "synergy" and "disruption."',
-    detail: "We run A/B testing on subject lines, openers, and value propositions from day one. Winning variants are scaled; poor performers are retired within the first two weeks. Messaging is a living system, not a one-time brief.",
+    detail: "We run A/B testing on subject lines, openers, and value propositions from day one. Winning variants are scaled; poor performers are retired within the first two weeks. Messaging is a living system, not a one time brief.",
   },
   {
     num: "Step 04",
-    title: "Multi-channel outreach",
-    body: "Our team executes across email, LinkedIn, and phone in co-ordinated sequences. We handle replies, objections, and scheduling — your sales team only appears when a prospect is qualified and keen.",
-    detail: "We run sequences of 6–9 touchpoints over 21 days. Every negative response is recorded and used to refine targeting. Every positive response is triaged within one business hour. Nothing falls through the cracks.",
+    title: "Multichannel outreach",
+    body: "Our team executes across email, LinkedIn, and phone in coordinated sequences. We handle replies, objections, and scheduling — your sales team only appears when a prospect is qualified and keen.",
+    detail: "We run sequences of 6 to 9 touchpoints over 21 days. Every negative response is recorded and used to refine targeting. Every positive response is triaged within one business hour. Nothing falls through the cracks.",
   },
   {
     num: "Step 05",
     title: "Qualified handoff & reporting",
     body: "Warm introductions land in your calendar. Each comes with a briefing note — company context, prospect background, conversation summary, and relevant talking points for your meeting.",
-    detail: "You receive a live dashboard showing activity metrics (contacts reached, opens, replies), pipeline metrics (meetings booked, no-shows, conversion rates), and financial metrics (pipeline value, cost per meeting). Monthly review calls keep strategy aligned with results.",
+    detail: "You receive a live dashboard showing activity metrics (contacts reached, opens, replies), pipeline metrics (meetings booked, meetings missed, conversion rates), and financial metrics (pipeline value, cost per meeting). Monthly review calls keep strategy aligned with results.",
   },
 ];
 
@@ -111,7 +111,7 @@ export default function HowItWorksPage() {
         <div className="wrap">
           <Reveal>
             <div className="section-header">
-              <p className="eyebrow">The Five-Step Process</p>
+              <p className="eyebrow">The Five Step Process</p>
               <h2>How we build your pipeline from zero to predictable.</h2>
             </div>
           </Reveal>
@@ -182,7 +182,7 @@ export default function HowItWorksPage() {
             <div className="section-header">
               <p className="eyebrow">Integrations</p>
               <h2>Works with the stack you already have.</h2>
-              <p>Every lead is automatically logged, scored, and routed into your CRM. No manual data entry. No double-handling.</p>
+              <p>Every lead is automatically logged, scored, and routed into your CRM. No manual data entry. No double handling.</p>
             </div>
           </Reveal>
           <div className="int-grid">
@@ -226,7 +226,7 @@ export default function HowItWorksPage() {
             Ready to see the system in action?
           </h2>
           <p style={{ fontSize: 16, color: "oklch(70% 0.018 75)", maxWidth: 440, marginBottom: 32 }}>
-            Book a 30-minute call. We&rsquo;ll walk you through a live example of a campaign we ran in your industry and show you exactly what results to expect.
+            Book a 30 minute call. We&rsquo;ll walk you through a live example of a campaign we ran in your industry and show you exactly what results to expect.
           </p>
           <Link href="/contact" className="btn btn-warm btn-lg">Book a discovery call</Link>
         </div>

@@ -1,0 +1,8 @@
+.next
+STV Design
+node_modules
+.env*.local
+.env.local
+.env
+*.log
+.git

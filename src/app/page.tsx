@@ -42,7 +42,7 @@ const services = [
       </svg>
     ),
     title: "Pipeline Reporting",
-    body: "Real-time dashboards showing opens, replies, meetings booked, and pipeline value — full transparency on what's working.",
+    body: "Realtime dashboards showing opens, replies, meetings booked, and pipeline value — full transparency on what's working.",
   },
   {
     icon: (
@@ -76,14 +76,26 @@ const comparisonRows = [
   { feature: "Bring your own list required",          lh: "No",  mc: "Yes",     ml: "Yes",  br: "Yes",     eo: "Yes", negative: true  },
 ];
 
-// Dark green matches the warm cream palette without clashing with the rust accent
 const GREEN = "oklch(35% 0.10 155)";
 const RED   = "oklch(50% 0.18 22)";
+
+const TickIcon = ({ color }: { color: string }) => (
+  <svg style={{ display: "inline-block", verticalAlign: "middle", color }} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="20 6 9 17 4 12" />
+  </svg>
+);
+
+const CrossIcon = ({ color }: { color: string }) => (
+  <svg style={{ display: "inline-block", verticalAlign: "middle", color }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+);
 
 const checkCell = (val: string, isLeadHaus: boolean, negative: boolean) => {
   if (isLeadHaus) {
     // LeadHaus is always the winner — green tick regardless of Yes/No
-    return <span style={{ color: GREEN, fontSize: 17, fontWeight: 700 }}>✓</span>;
+    return <TickIcon color={GREEN} />;
   }
 
   if (val === "Partial") {
@@ -94,12 +106,12 @@ const checkCell = (val: string, isLeadHaus: boolean, negative: boolean) => {
 
   if (isBad) {
     return (
-      <span style={{ color: RED, fontSize: 15, fontWeight: 700, lineHeight: 1 }}>✕</span>
+      <CrossIcon color={RED} />
     );
   }
 
   // Competitor has the positive value (e.g. they do provide this feature)
-  return <span style={{ color: GREEN, fontSize: 17 }}>✓</span>;
+  return <TickIcon color={GREEN} />;
 };
 
 export default function HomePage() {
@@ -186,15 +198,15 @@ export default function HomePage() {
             <div className="section-header">
               <p className="eyebrow">The System</p>
               <h2>A proven system for predictable growth.</h2>
-              <p>We replace guesswork with a repeatable, data-driven process — from ICP mapping to qualified introductions delivered to your calendar.</p>
+              <p>We replace guesswork with a repeatable, data driven process — from ICP mapping to qualified introductions delivered to your calendar.</p>
             </div>
           </Reveal>
 
           <div className="steps-grid">
             {[
               { n: "01", title: "Target", body: "We define your ideal customer profile with surgical precision — industry, headcount, revenue, buying signals, and trigger events that indicate readiness." },
-              { n: "02", title: "Engage", body: "Our team runs multi-channel outreach across email, LinkedIn, and phone — using sequencing logic refined across 250+ live campaigns." },
-              { n: "03", title: "Deliver", body: "Warm, qualified introductions land in your calendar. Decision-makers who've expressed interest, verified in role, ready for a real conversation." },
+              { n: "02", title: "Engage", body: "Our team runs multichannel outreach across email, LinkedIn, and phone — using sequencing logic refined across 250+ live campaigns." },
+              { n: "03", title: "Deliver", body: "Warm, qualified introductions land in your calendar. Decision makers who've expressed interest, verified in role, ready for a real conversation." },
             ].map((step, i) => (
               <Reveal key={step.n} delay={i * 0.08}>
                 <div>
@@ -340,7 +352,7 @@ export default function HomePage() {
                     <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-accent)", background: "oklch(59% 0.130 34 / 0.05)" }}>£497</td>
                     <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-muted)" }}>$270</td>
                     <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-muted)" }}>$145</td>
-                    <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-muted)" }}>$69–$499</td>
+                    <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-muted)" }}>$69 to $499</td>
                     <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-muted)" }}>$36</td>
                   </tr>
                 </tbody>
@@ -393,7 +405,7 @@ export default function HomePage() {
                 Let&rsquo;s build your pipeline.
               </h2>
               <p style={{ marginTop: 12, fontSize: 16, color: "oklch(70% 0.018 75)", maxWidth: 420 }}>
-                Book a 30-minute discovery call and leave with a clear view of where your next 50 meetings are coming from.
+                Book a 30 minute discovery call and leave with a clear view of where your next 50 meetings are coming from.
               </p>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 10, minWidth: 272 }}>

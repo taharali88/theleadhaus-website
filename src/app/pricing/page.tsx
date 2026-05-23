@@ -31,7 +31,7 @@ const plans = [
     monthly: "4,800",
     annual: "4,080",
     period: "per month + performance",
-    desc: "For established teams ready to build a consistent, scalable pipeline. Full multi-channel execution with weekly reporting and live data.",
+    desc: "For established teams ready to build a consistent, scalable pipeline. Full multichannel execution with weekly reporting and live data.",
     features: [
       { text: "ICP definition & list build (up to 1,500 contacts/mo)", included: true },
       { text: "Email + LinkedIn + phone sequences", included: true },
@@ -53,17 +53,17 @@ const plans = [
     monthly: null,
     annual: null,
     period: "custom scope + SLA",
-    desc: "For companies that need dedicated team capacity, multi-territory outreach, or deep integration with existing revenue operations.",
+    desc: "For companies that need dedicated team capacity, multi territory outreach, or deep integration with existing revenue operations.",
     features: [
       { text: "Unlimited contacts & territory scope", included: true },
       { text: "Dedicated pod (SDR + strategist + data analyst)", included: true },
       { text: "All Growth features, plus:", included: true },
-      { text: "Multi-territory & multilingual campaigns", included: true },
-      { text: "RevOps consulting & CRM build-out", included: true },
-      { text: "Executive-level stakeholder reporting", included: true },
+      { text: "Multi territory & multilingual campaigns", included: true },
+      { text: "RevOps consulting & CRM buildout", included: true },
+      { text: "Executive level stakeholder reporting", included: true },
       { text: "Guaranteed meeting SLA", included: true },
       { text: "Quarterly pipeline review with your board", included: true },
-      { text: "White-labelling available", included: true },
+      { text: "White labelling available", included: true },
     ],
     cta: "Talk to sales",
     ctaClass: "btn btn-dark btn-full",
@@ -80,8 +80,8 @@ const compareRows = [
   { section: "Data & targeting" },
   { feature: "Contacts built per month", starter: "Up to 500", growth: "Up to 1,500", enterprise: "Unlimited" },
   { feature: "ICP mapping session",    starter: true,  growth: true,  enterprise: true },
-  { feature: "Trigger-event targeting",starter: false, growth: true,  enterprise: true },
-  { feature: "GDPR-compliant verification", starter: true, growth: true, enterprise: true },
+  { feature: "Trigger event targeting",starter: false, growth: true,  enterprise: true },
+  { feature: "GDPR compliant verification", starter: true, growth: true, enterprise: true },
   { section: "Reporting" },
   { feature: "Monthly reporting call", starter: true,  growth: true,  enterprise: true },
   { feature: "Weekly strategy call",   starter: false, growth: true,  enterprise: true },
@@ -109,7 +109,7 @@ const faqs = [
   },
   {
     q: "Is there a minimum contract length?",
-    a: "Starter is available month-to-month with 30 days' notice. Growth requires a 3-month minimum — it takes that long to properly tune messaging and ICP. Enterprise terms are negotiated as part of the engagement. We've never had a client leave because results weren't there; most upgrade instead.",
+    a: "Starter is available month to month with 30 days' notice. Growth requires a three month minimum — it takes that long to properly tune messaging and ICP. Enterprise terms are negotiated as part of the engagement. We've never had a client leave because results weren't there; most upgrade instead.",
   },
   {
     q: "Can you work with our existing CRM and tech stack?",
@@ -121,8 +121,14 @@ const faqs = [
   },
 ];
 
+const TickIcon = ({ color }: { color: string }) => (
+  <svg style={{ display: "inline-block", verticalAlign: "middle", color }} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="20 6 9 17 4 12" />
+  </svg>
+);
+
 function CellVal({ val }: { val: boolean | string | undefined }) {
-  if (val === true)  return <span style={{ color: "var(--color-accent)", fontSize: 17 }}>✓</span>;
+  if (val === true)  return <span style={{ color: "var(--color-accent)" }}><TickIcon color="currentColor" /></span>;
   if (val === false) return <span style={{ color: "var(--color-border)", fontSize: 18 }}>—</span>;
   return <span style={{ color: "var(--color-muted)", fontSize: 13 }}>{val}</span>;
 }

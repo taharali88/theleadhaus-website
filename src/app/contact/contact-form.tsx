@@ -26,11 +26,31 @@ const expectSteps = [
 ];
 
 const trustItems = [
-  "30-minute call — no obligation",
+  "30 minute call — no obligation",
   "Proposal delivered in under 24 hours",
-  "GDPR-compliant campaigns, always",
+  "GDPR compliant campaigns, always",
   "You own every asset we produce",
 ];
+
+const MailIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+    <polyline points="22,6 12,13 2,6" />
+  </svg>
+);
+
+const MapPinIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+    <circle cx="12" cy="10" r="3" />
+  </svg>
+);
+
+const SuccessTickIcon = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="20 6 9 17 4 12" />
+  </svg>
+);
 
 export function ContactForm() {
   const [formState, setFormState] = useState<"idle" | "submitting" | "success" | "error">("idle");
@@ -153,10 +173,10 @@ export function ContactForm() {
               {/* Contact details */}
               <div style={{ marginTop: 48, paddingTop: 48, borderTop: "1px solid var(--color-border)", display: "flex", flexDirection: "column", gap: 14 }}>
                 {[
-                  { icon: "✉", label: "hello@leadhaus.com", href: "mailto:hello@leadhaus.com" },
-                  { icon: "📍", label: "London, United Kingdom", href: null },
-                ].map((detail) => (
-                  <div key={detail.label} style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 14, color: "var(--color-muted)" }}>
+                  { icon: <MailIcon />, label: "hello@leadhaus.com", href: "mailto:hello@leadhaus.com" },
+                  { icon: <MapPinIcon />, label: "London, United Kingdom", href: null },
+                ].map((detail, idx) => (
+                  <div key={idx} style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 14, color: "var(--color-muted)" }}>
                     <div style={{
                       width: 32,
                       height: 32,
@@ -166,7 +186,6 @@ export function ContactForm() {
                       alignItems: "center",
                       justifyContent: "center",
                       flexShrink: 0,
-                      fontSize: 12,
                     }}>
                       {detail.icon}
                     </div>
@@ -201,10 +220,9 @@ export function ContactForm() {
                       alignItems: "center",
                       justifyContent: "center",
                       margin: "0 auto 20px",
-                      fontSize: 28,
                       color: "var(--color-accent)",
                     }}>
-                      ✓
+                      <SuccessTickIcon />
                     </div>
                     <h3 style={{ fontFamily: "var(--font-serif), 'Iowan Old Style', Georgia, serif", fontSize: 24, fontWeight: 700, marginBottom: 10 }}>
                       We&rsquo;ll be in touch shortly.
