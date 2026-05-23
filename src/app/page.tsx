@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { Reveal, ScaleIn } from "@/components/Motion";
 
 const comparisonRows = [
@@ -248,6 +249,239 @@ function OutboundCockpitMockup() {
   );
 }
 
+// Interactive lead generator component
+function LiveLeadScanner() {
+  const [industry, setIndustry] = useState("recruitment");
+  const [state, setState] = useState<"idle" | "scanning" | "done">("idle");
+  const [progress, setProgress] = useState(0);
+  const [statusText, setStatusText] = useState("");
+
+  const sampleLeads: Record<string, Array<{ name: string; role: string; company: string; trigger: string; location: string }>> = {
+    recruitment: [
+      { name: "David Vance", role: "Managing Director", company: "Apex Tech Talent", trigger: "Registered new business entity and renting office", location: "London" },
+      { name: "Sarah Jenkins", role: "Operations Director", company: "Vanguard Recruitment", trigger: "Posted twelve vacancies for senior recruiters on LinkedIn", location: "London" },
+      { name: "Marcus Stone", role: "Founder", company: "Stone and Partners", trigger: "Acquired second office lease in the city", location: "Manchester" }
+    ],
+    accountancy: [
+      { name: "Clara Reynolds", role: "Senior Partner", company: "Reynolds Accounting", trigger: "Upgraded HMRC tax portal credentials and hiring", location: "Birmingham" },
+      { name: "Thomas Sterling", role: "Practice Manager", company: "Sterling Ledger Group", trigger: "Incorporating new consultancy subsidiary", location: "Glasgow" },
+      { name: "Sophia Chen", role: "Founder", company: "Chen and Associates", trigger: "Filing corporate expansion reports", location: "London" }
+    ],
+    law: [
+      { name: "Harvey Vance", role: "Senior Partner", company: "Vance Legal", trigger: "Merging two local offices and hiring conveyancers", location: "Leeds" },
+      { name: "Elaine Brooks", role: "Practice Director", company: "Brooks and Co Solicitors", trigger: "Expanding family law practice team", location: "Birmingham" },
+      { name: "Robert Croft", role: "Managing Partner", company: "Croft Legal Group", trigger: "Opening new commercial litigation branch", location: "Manchester" }
+    ],
+    agencies: [
+      { name: "Alex Mercer", role: "Founder", company: "Mercer Digital", trigger: "Announced seed funding round and office expansion", location: "London" },
+      { name: "Jane Foster", role: "Creative Director", company: "Foster and Co Creative", trigger: "Signing new office lease for design studio", location: "Manchester" },
+      { name: "Daniel Craig", role: "MD", company: "Craig Web Developers", trigger: "Expanding engineering team by five heads", location: "Glasgow" }
+    ],
+    consultants: [
+      { name: "Richard Hall", role: "CEO", company: "Hall Growth Advisors", trigger: "Filing new consulting trademark and hiring", location: "Leeds" },
+      { name: "Emma Watson", role: "Founder", company: "Watson Management", trigger: "Opening second consulting office branch", location: "London" },
+      { name: "James Bond", role: "MD", company: "Bond Advisory Services", trigger: "Registered new B2B advisory entity", location: "Birmingham" }
+    ]
+  };
+
+  const statuses = [
+    "Querying Company House registers...",
+    "Filtering active hiring alerts...",
+    "Scanning land registry lease filings...",
+    "Matching local trigger signals...",
+    "Verifying contact deliverability status..."
+  ];
+
+  const handleScan = () => {
+    setState("scanning");
+    setProgress(0);
+    setStatusText(statuses[0]);
+  };
+
+  useEffect(() => {
+    if (state !== "scanning") return;
+
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        const next = prev + 5;
+        if (next >= 100) {
+          clearInterval(timer);
+          setState("done");
+          return 100;
+        }
+        const index = Math.min(Math.floor((next / 100) * statuses.length), statuses.length - 1);
+        setStatusText(statuses[index]);
+        return next;
+      });
+    }, 150);
+
+    return () => clearInterval(timer);
+  }, [state]);
+
+  const currentLeads = sampleLeads[industry] || [];
+
+  return (
+    <section style={{ padding: "96px 0", background: "var(--color-surface)", borderBottom: "1px solid var(--color-border)" }}>
+      <div className="wrap" style={{ maxWidth: 860, textAlign: "center" }}>
+        <Reveal>
+          <span className="eyebrow" style={{ textAlign: "center" }}>Live Lead Scanner</span>
+          <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(24px, 3vw, 36px)", marginBottom: 16 }}>
+            Scan live buying triggers in your sector
+          </h2>
+          <p style={{ color: "var(--color-body)", fontSize: 16, maxWidth: 640, margin: "0 auto 36px", lineHeight: 1.6 }}>
+            Select your industry below. Our scanner will query active incorporations, LinkedIn vacancy alerts, and land filings to find companies in need of your services this week.
+          </p>
+
+          <div style={{
+            background: "var(--color-background)",
+            padding: 32,
+            border: "1px solid var(--color-border)",
+            borderRadius: 12,
+            textAlign: "left",
+            boxShadow: "0 4px 20px oklch(17% 0.024 58 / 0.03)"
+          }}>
+            {state === "idle" && (
+              <div style={{ display: "flex", gap: 16, flexWrap: "wrap", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 240 }}>
+                  <label htmlFor="industry-select" style={{ fontSize: 12, fontWeight: 600, color: "var(--color-muted)" }}>YOUR INDUSTRY</label>
+                  <select
+                    id="industry-select"
+                    value={industry}
+                    onChange={(e) => setIndustry(e.target.value)}
+                    className="form-input"
+                    style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)" }}
+                  >
+                    <option value="recruitment">Recruitment Agencies</option>
+                    <option value="accountancy">Accountancy Firms</option>
+                    <option value="law">Law Firms and Solicitors</option>
+                    <option value="agencies">Marketing and Web Agencies</option>
+                    <option value="consultants">Management Consultants</option>
+                  </select>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleScan}
+                  className="btn btn-warm btn-lg"
+                  style={{ marginTop: 20 }}
+                >
+                  Scan live triggers
+                </button>
+              </div>
+            )}
+
+            {state === "scanning" && (
+              <div style={{ padding: "16px 0", textAlign: "center" }}>
+                <div style={{ fontSize: 14, fontWeight: 600, color: "var(--color-accent)", marginBottom: 12 }}>
+                  {statusText}
+                </div>
+                <div style={{ width: "100%", background: "var(--color-border)", height: 6, borderRadius: 3, overflow: "hidden", marginBottom: 8 }}>
+                  <div style={{ width: `${progress}%`, background: "var(--color-accent)", height: "100%", transition: "width 0.1s ease" }} />
+                </div>
+                <div style={{ fontSize: 12, color: "var(--color-muted)" }}>{progress} percent compiled</div>
+              </div>
+            )}
+
+            {state === "done" && (
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: "var(--color-foreground)" }}>
+                    Sourced this week in your territory:
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setState("idle")}
+                    className="btn btn-outline"
+                    style={{ padding: "6px 12px", fontSize: 12 }}
+                  >
+                    New scan
+                  </button>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                  {currentLeads.map((lead, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        background: "var(--color-surface)",
+                        border: "1px solid var(--color-border)",
+                        padding: 20,
+                        borderRadius: 8,
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 12
+                      }}
+                    >
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", flexWrap: "wrap", gap: 12 }}>
+                        <div>
+                          <div style={{ fontSize: 16, fontWeight: 700, color: "var(--color-foreground)" }}>{lead.company}</div>
+                          <div style={{ fontSize: 13, color: "var(--color-muted)" }}>{lead.role} &bull; {lead.location}</div>
+                        </div>
+                        <span style={{
+                          fontSize: 11,
+                          fontWeight: 600,
+                          color: "var(--color-accent)",
+                          background: "var(--color-accent-bg)",
+                          padding: "4px 10px",
+                          borderRadius: 4
+                        }}>
+                          {lead.trigger}
+                        </span>
+                      </div>
+                      
+                      <div style={{
+                        borderTop: "1px solid var(--color-border)",
+                        paddingTop: 12,
+                        display: "flex",
+                        gap: 24,
+                        fontSize: 12,
+                        alignItems: "center"
+                      }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--color-muted)" }}>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                          </svg>
+                          <span style={{ filter: "blur(4.5px)" }}>{lead.name.toLowerCase().replace(" ", "")} at company dot com</span>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--color-muted)" }}>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                          </svg>
+                          <span style={{ filter: "blur(4.5px)" }}>plus forty four seven thousand twelve thirty four fifty six</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{
+                  marginTop: 24,
+                  padding: 20,
+                  background: "oklch(59% 0.130 34 / 0.05)",
+                  border: "1.5px dashed var(--color-accent)",
+                  borderRadius: 8,
+                  textAlign: "center"
+                }}>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: "var(--color-accent)", marginBottom: 8 }}>
+                    Territory Exclusivity Alert
+                  </div>
+                  <p style={{ fontSize: 13, color: "var(--color-body)", lineHeight: 1.6, margin: "0 auto 16px", maxWidth: 640 }}>
+                    Our leads are one hundred percent exclusive. We only work with one client per industry per city. Secure your region before your competitors claim these buyers.
+                  </p>
+                  <Link href="/contact" className="btn btn-warm">
+                    Claim your exclusive territory
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 export default function HomePage() {
   return (
     <div>
@@ -296,6 +530,9 @@ export default function HomePage() {
           <OutboundCockpitMockup />
         </div>
       </section>
+
+      {/* ══ INTERACTIVE LIVE LEAD SCANNER ══ */}
+      <LiveLeadScanner />
 
       {/* ══ SECTION 2: THE PROBLEM WITH OTHER TOOLS ══ */}
       <section style={{ padding: "96px 0", background: "var(--color-surface)", borderBottom: "1px solid var(--color-border)" }}>

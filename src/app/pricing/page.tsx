@@ -119,8 +119,27 @@ function CellVal({ val }: { val: boolean | string | undefined }) {
   return <span style={{ color: "var(--color-muted)", fontSize: 13 }}>{val}</span>;
 }
 
+const planPricing: Record<string, Record<string, { symbol: string; monthly: string; upfront: string; saving: string }>> = {
+  Starter: {
+    GBP: { symbol: "£", monthly: "497", upfront: "2,386", saving: "596" },
+    USD: { symbol: "$", monthly: "597", upfront: "2,866", saving: "716" },
+    EUR: { symbol: "€", monthly: "577", upfront: "2,766", saving: "696" },
+  },
+  Growth: {
+    GBP: { symbol: "£", monthly: "997", upfront: "4,786", saving: "1,196" },
+    USD: { symbol: "$", monthly: "1,197", upfront: "5,746", saving: "1,436" },
+    EUR: { symbol: "€", monthly: "1,157", upfront: "5,556", saving: "1,386" },
+  },
+  Scale: {
+    GBP: { symbol: "£", monthly: "1,997", upfront: "9,586", saving: "2,396" },
+    USD: { symbol: "$", monthly: "2,397", upfront: "11,506", saving: "2,876" },
+    EUR: { symbol: "€", monthly: "2,317", upfront: "11,126", saving: "2,776" },
+  },
+};
+
 export default function PricingPage() {
   const [upfront, setUpfront] = useState(false);
+  const [currency, setCurrency] = useState<"GBP" | "USD" | "EUR">("GBP");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
@@ -136,6 +155,30 @@ export default function PricingPage() {
           <p style={{ fontSize: 18, lineHeight: 1.65, color: "var(--color-muted)", maxWidth: 640, margin: "0 auto 40px" }}>
             Three plans. Pick the one that matches the level of service your business needs. Every plan includes lead generation, full outreach delivery, weekly reporting, and the live dashboard.
           </p>
+
+          {/* Currency toggle */}
+          <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 20 }}>
+            {(["GBP", "USD", "EUR"] as const).map((curr) => (
+              <button
+                key={curr}
+                type="button"
+                onClick={() => setCurrency(curr)}
+                style={{
+                  background: currency === curr ? "var(--color-accent)" : "var(--color-surface)",
+                  color: currency === curr ? "white" : "var(--color-foreground)",
+                  border: "1px solid var(--color-border)",
+                  borderRadius: 6,
+                  padding: "6px 16px",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  transition: "all 0.2s"
+                }}
+              >
+                {curr}
+              </button>
+            ))}
+          </div>
 
           {/* Billing toggle */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 56 }}>
@@ -254,12 +297,14 @@ export default function PricingPage() {
                   color: plan.featured ? "var(--color-background)" : "var(--color-foreground)",
                   marginBottom: 6,
                 }}>
-                  <span style={{ fontFamily: "var(--font-sans), system-ui", fontSize: 20, fontWeight: 600, verticalAlign: "top", marginTop: 10, display: "inline-block" }}>£</span>
-                  {upfront ? plan.upfront : plan.monthly}
+                  <span style={{ fontFamily: "var(--font-sans), system-ui", fontSize: 20, fontWeight: 600, verticalAlign: "top", marginTop: 10, display: "inline-block" }}>
+                    {planPricing[plan.name][currency].symbol}
+                  </span>
+                  {upfront ? planPricing[plan.name][currency].upfront : planPricing[plan.name][currency].monthly}
                 </div>
 
                 <div style={{ fontSize: 13, color: plan.featured ? "oklch(60% 0.018 75)" : "var(--color-muted)", marginBottom: 8 }}>
-                  {upfront ? `for six months upfront (saves £${plan.saving})` : plan.period}
+                  {upfront ? `for six months upfront (saves ${planPricing[plan.name][currency].symbol}${planPricing[plan.name][currency].saving})` : plan.period}
                 </div>
 
                 <p style={{

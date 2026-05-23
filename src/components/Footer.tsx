@@ -8,6 +8,8 @@ const footerCols = [
     links: [
       { href: "/how-it-works", label: "How It Works" },
       { href: "/pricing",      label: "Pricing" },
+      { href: "/lead-generation", label: "Sectors" },
+      { href: "/diy-cost-calculator", label: "DIY Cost Calculator" },
       { href: "/faq",          label: "FAQ" },
       { href: "/contact",      label: "Contact" },
     ],
@@ -18,6 +20,8 @@ const footerCols = [
       { href: "/comparison/leadhaus-vs-mailchimp", label: "Leadhaus vs Mailchimp" },
       { href: "/comparison/leadhaus-vs-smartlead", label: "Leadhaus vs Smartlead" },
       { href: "/comparison/leadhaus-vs-lemlist",   label: "Leadhaus vs Lemlist" },
+      { href: "/comparison/leadhaus-vs-apollo",    label: "Leadhaus vs Apollo" },
+      { href: "/comparison/leadhaus-vs-instantly", label: "Leadhaus vs Instantly" },
     ],
   },
   {
