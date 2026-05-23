@@ -4,27 +4,20 @@ import Link from "next/link";
 
 const footerCols = [
   {
-    heading: "Company",
+    heading: "Platform",
     links: [
       { href: "/how-it-works", label: "How It Works" },
-      { href: "/#services",    label: "Services" },
-      { href: "/contact",      label: "About" },
-    ],
-  },
-  {
-    heading: "Product",
-    links: [
       { href: "/pricing",      label: "Pricing" },
-      { href: "/contact",      label: "Case Studies" },
-      { href: "/how-it-works", label: "Integrations" },
+      { href: "/faq",          label: "FAQ" },
+      { href: "/contact",      label: "Contact" },
     ],
   },
   {
-    heading: "Get in Touch",
+    heading: "Legal",
     links: [
-      { href: "/contact",               label: "Book a Call" },
-      { href: "mailto:hello@leadhaus.com", label: "hello@leadhaus.com" },
-      { href: "#",                      label: "LinkedIn" },
+      { href: "/privacy", label: "Privacy Policy" },
+      { href: "/terms",   label: "Terms of Service" },
+      { href: "/cookies", label: "Cookie Policy" },
     ],
   },
 ];
@@ -58,7 +51,7 @@ export function Footer() {
                 textDecoration: "none",
               }}
             >
-              LeadHaus
+              Leadhaus
             </Link>
             <p
               style={{
@@ -68,7 +61,7 @@ export function Footer() {
                 lineHeight: 1.65,
               }}
             >
-              Premium lead generation for established B2B companies ready to scale their pipeline without scaling their headcount.
+              Premium lead generation for established businesses ready to scale their pipeline.
             </p>
           </div>
 
@@ -119,12 +112,7 @@ export function Footer() {
             color: "oklch(40% 0.012 58)",
           }}
         >
-          <span>© {currentYear} LeadHaus. All rights reserved.</span>
-          <span style={{ display: "flex", gap: 16 }}>
-            <Link href="/privacy" style={{ color: "oklch(40% 0.012 58)", textDecoration: "none" }}>Privacy Policy</Link>
-            <Link href="/terms"   style={{ color: "oklch(40% 0.012 58)", textDecoration: "none" }}>Terms of Service</Link>
-            <Link href="/cookies" style={{ color: "oklch(40% 0.012 58)", textDecoration: "none" }}>Cookies</Link>
-          </span>
+          <span>© {currentYear} Leadhaus. All rights reserved.</span>
         </div>
       </div>
 

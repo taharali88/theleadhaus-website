@@ -3,69 +3,65 @@
 import Link from "next/link";
 import { useState } from "react";
 
-// Metadata can't be used in client components, so it's set in a parent
 const plans = [
   {
     name: "Starter",
-    monthly: "2,400",
-    annual: "2,040",
-    period: "per month + performance",
-    desc: "For companies who want to test outbound before committing to scale. A fully managed pilot that delivers real meetings — not promises.",
+    monthly: "497",
+    upfront: "2,386",
+    saving: "596",
+    period: "per month",
+    desc: "For local service businesses, solo operators, single service offerings.",
     features: [
-      { text: "ICP definition & list build (up to 500 contacts/mo)", included: true },
-      { text: "Email + LinkedIn outreach sequences", included: true },
-      { text: "Dedicated account manager", included: true },
-      { text: "Monthly reporting call", included: true },
-      { text: "CRM integration (HubSpot or Salesforce)", included: true },
-      { text: "Qualified meeting briefing notes", included: true },
-      { text: "Phone outreach", included: false },
-      { text: "A/B copy testing", included: false },
-      { text: "Live pipeline dashboard", included: false },
+      { text: "Up to two outreach channels (email plus one intent monitor)", included: true },
+      { text: "Onboarding questionnaire and audience build", included: true },
+      { text: "Fresh leads generated weekly, exclusive to your business", included: true },
+      { text: "Full outreach sent from our infrastructure", included: true },
+      { text: "Weekly Monday morning summary", included: true },
+      { text: "Live dashboard access", included: true },
+      { text: "Bounce binning and database maintenance", included: true },
+      { text: "Email support, response within two working days", included: true },
     ],
-    cta: "Book a call",
+    cta: "Choose Starter",
     ctaClass: "btn btn-outline btn-full",
     featured: false,
   },
   {
     name: "Growth",
-    monthly: "4,800",
-    annual: "4,080",
-    period: "per month + performance",
-    desc: "For established teams ready to build a consistent, scalable pipeline. Full multichannel execution with weekly reporting and live data.",
+    monthly: "997",
+    upfront: "4,786",
+    saving: "1,196",
+    period: "per month",
+    desc: "For established small businesses, multi service operations, scaling consultancies.",
     features: [
-      { text: "ICP definition & list build (up to 1,500 contacts/mo)", included: true },
-      { text: "Email + LinkedIn + phone sequences", included: true },
-      { text: "Senior account manager (≥5 years experience)", included: true },
-      { text: "Weekly strategy call", included: true },
-      { text: "CRM integration (all major platforms)", included: true },
-      { text: "Qualified meeting briefing notes", included: true },
-      { text: "A/B copy testing — unlimited variants", included: true },
-      { text: "Live pipeline dashboard", included: true },
-      { text: "Reply handling & objection management", included: true },
+      { text: "Up to four outreach channels (B2B email, intent monitoring, social engagement, Land Registry or Companies House triggers)", included: true },
+      { text: "Custom audience segmentation by job title, industry, geography, or life event", included: true },
+      { text: "Monthly thirty minute strategy call", included: true },
+      { text: "Priority support, response within one working day", included: true },
+      { text: "Behavioural sequence optimisation", included: true },
+      { text: "Includes all Starter features", included: true },
     ],
-    cta: "Book a call",
+    cta: "Choose Growth",
     ctaClass: "btn btn-warm btn-full btn-lg",
     featured: true,
     badge: "Most Popular",
   },
   {
-    name: "Enterprise",
-    monthly: null,
-    annual: null,
-    period: "custom scope + SLA",
-    desc: "For companies that need dedicated team capacity, multi territory outreach, or deep integration with existing revenue operations.",
+    name: "Scale",
+    monthly: "1,997",
+    upfront: "9,586",
+    saving: "2,396",
+    period: "per month",
+    desc: "For agencies serving their own clients, businesses with multiple service lines, operations requiring custom integrations.",
     features: [
-      { text: "Unlimited contacts & territory scope", included: true },
-      { text: "Dedicated pod (SDR + strategist + data analyst)", included: true },
-      { text: "All Growth features, plus:", included: true },
-      { text: "Multi territory & multilingual campaigns", included: true },
-      { text: "RevOps consulting & CRM buildout", included: true },
-      { text: "Executive level stakeholder reporting", included: true },
-      { text: "Guaranteed meeting SLA", included: true },
-      { text: "Quarterly pipeline review with your board", included: true },
-      { text: "White labelling available", included: true },
+      { text: "All outreach channels enabled", included: true },
+      { text: "Dedicated onboarding call with the founder", included: true },
+      { text: "Weekly strategy call", included: true },
+      { text: "Custom API integration with your existing CRM or systems", included: true },
+      { text: "Same day support", included: true },
+      { text: "Bespoke campaign design", included: true },
+      { text: "Includes all Growth features", included: true },
     ],
-    cta: "Talk to sales",
+    cta: "Choose Scale",
     ctaClass: "btn btn-dark btn-full",
     featured: false,
   },
@@ -73,51 +69,41 @@ const plans = [
 
 const compareRows = [
   { section: "Outreach channels" },
-  { feature: "Email sequences",        starter: true,  growth: true,  enterprise: true },
-  { feature: "LinkedIn outreach",      starter: true,  growth: true,  enterprise: true },
-  { feature: "Phone / cold calling",   starter: false, growth: true,  enterprise: true },
-  { feature: "Multilingual campaigns", starter: false, growth: false, enterprise: true },
+  { feature: "Outreach channels count", starter: "Up to 2", growth: "Up to 4", enterprise: "All channels" },
+  { feature: "B2B email campaign", starter: true, growth: true, enterprise: true },
+  { feature: "Intent monitoring", starter: true, growth: true, enterprise: true },
+  { feature: "Social engagement", starter: false, growth: true, enterprise: true },
+  { feature: "Land Registry triggers", starter: false, growth: true, enterprise: true },
+  { feature: "Companies House triggers", starter: false, growth: true, enterprise: true },
   { section: "Data & targeting" },
-  { feature: "Contacts built per month", starter: "Up to 500", growth: "Up to 1,500", enterprise: "Unlimited" },
-  { feature: "ICP mapping session",    starter: true,  growth: true,  enterprise: true },
-  { feature: "Trigger event targeting",starter: false, growth: true,  enterprise: true },
-  { feature: "GDPR compliant verification", starter: true, growth: true, enterprise: true },
-  { section: "Reporting" },
-  { feature: "Monthly reporting call", starter: true,  growth: true,  enterprise: true },
-  { feature: "Weekly strategy call",   starter: false, growth: true,  enterprise: true },
-  { feature: "Live pipeline dashboard",starter: false, growth: true,  enterprise: true },
-  { feature: "Executive board reporting", starter: false, growth: false, enterprise: true },
-  { section: "Team & support" },
-  { feature: "Account manager",        starter: "Dedicated", growth: "Senior (5+ yrs)", enterprise: "Dedicated pod" },
-  { feature: "A/B copy testing",       starter: false, growth: "Unlimited", enterprise: "Unlimited" },
-  { feature: "Reply handling",         starter: false, growth: true,  enterprise: true },
-  { feature: "Guaranteed meeting SLA", starter: false, growth: false, enterprise: true },
+  { feature: "Weekly lead generation", starter: true, growth: true, enterprise: true },
+  { feature: "Exclusive leads (no resale)", starter: true, growth: true, enterprise: true },
+  { feature: "Audience segmentation", starter: false, growth: true, enterprise: true },
+  { feature: "Bespoke campaign design", starter: false, growth: false, enterprise: true },
+  { section: "Support & reporting" },
+  { feature: "Weekly Monday summary", starter: true, growth: true, enterprise: true },
+  { feature: "Live dashboard access", starter: true, growth: true, enterprise: true },
+  { feature: "Support response SLA", starter: "2 working days", growth: "1 working day", enterprise: "Same day" },
+  { feature: "Strategy calls", starter: "None", growth: "Monthly (30 min)", enterprise: "Weekly" },
+  { feature: "Onboarding call with founder", starter: false, growth: false, enterprise: true },
 ];
 
 const faqs = [
   {
-    q: "How does the performance component work?",
-    a: "On top of the monthly retainer, we charge a small fee per qualified meeting delivered — typically £150–£300 depending on deal size and industry. This means our incentives are directly tied to yours. We don't earn more by sending more emails; we earn more by filling your calendar with the right conversations.",
+    q: "Why is there a six month minimum commitment?",
+    a: "Lead generation works on compounding patterns. The first month builds the foundation, the second month optimises the sequences, and the third month onwards is when meaningful response volume arrives. A shorter commitment would not give the system enough time to produce the results you signed up for.",
   },
   {
-    q: 'What counts as a "qualified" meeting?',
-    a: "We agree a qualification criteria with you during onboarding — typically seniority, company size, budget authority, and timeline. A meeting only counts if the prospect meets all agreed criteria and the meeting actually occurs. No-shows and declined meetings don't count toward your performance fees.",
+    q: "Can I get a refund?",
+    a: "Yes within fourteen days of sign up under UK consumer law. After fourteen days the six month minimum commitment applies.",
   },
   {
-    q: "How long until I see my first meetings?",
-    a: "Most clients see their first qualified meetings in weeks two or three. Week one is onboarding, ICP mapping, and list build. Sequences go live in week two. Results vary by industry, deal size, and how tight your ICP is — but we typically aim to cover your retainer cost in qualified pipeline value within the first 30 days.",
+    q: "What happens after six months?",
+    a: "You move to a rolling monthly basis. You may cancel at any point with thirty days notice. We give you a clean export of your entire database when you leave.",
   },
   {
-    q: "Is there a minimum contract length?",
-    a: "Starter is available month to month with 30 days' notice. Growth requires a three month minimum — it takes that long to properly tune messaging and ICP. Enterprise terms are negotiated as part of the engagement. We've never had a client leave because results weren't there; most upgrade instead.",
-  },
-  {
-    q: "Can you work with our existing CRM and tech stack?",
-    a: "Yes. We integrate with Salesforce, HubSpot, Pipedrive, Outreach, Salesloft, and most other major CRMs and sequencing tools via native integrations or Zapier. Every lead is automatically logged with full activity context — you'll never be chasing data from us. Growth and Enterprise tiers include integration setup at no extra cost.",
-  },
-  {
-    q: "Do I own the contacts and data you build?",
-    a: "Completely. Every contact list, every message thread, every campaign asset is yours from day one. When an engagement ends, we export everything and hand it over in full. We document our process so your internal team — or any future agency — can pick it up and keep running it. We build systems, not dependencies.",
+    q: "Are there any hidden fees?",
+    a: "No. The price you see is the price you pay. There are no charges for unsubscribed contacts, no overage fees, no per email costs, no add on charges.",
   },
 ];
 
@@ -134,7 +120,7 @@ function CellVal({ val }: { val: boolean | string | undefined }) {
 }
 
 export default function PricingPage() {
-  const [annual, setAnnual] = useState(false);
+  const [upfront, setUpfront] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
@@ -145,28 +131,28 @@ export default function PricingPage() {
         <div className="wrap">
           <p className="eyebrow" style={{ textAlign: "center" }}>Pricing</p>
           <h1 style={{ marginBottom: 20 }}>
-            Transparent pricing.<br />Real results.
+            One fixed price every month. No surprises.
           </h1>
-          <p style={{ fontSize: 18, lineHeight: 1.65, color: "var(--color-muted)", maxWidth: 480, margin: "0 auto 40px" }}>
-            No retainer traps. No hidden minimums. Three tiers built for where you are now — upgrade as your pipeline scales.
+          <p style={{ fontSize: 18, lineHeight: 1.65, color: "var(--color-muted)", maxWidth: 640, margin: "0 auto 40px" }}>
+            Three plans. Pick the one that matches the level of service your business needs. Every plan includes lead generation, full outreach delivery, weekly reporting, and the live dashboard.
           </p>
 
           {/* Billing toggle */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 56 }}>
-            <span style={{ fontSize: 14, fontWeight: 500, color: annual ? "var(--color-muted)" : "var(--color-foreground)" }}>
+            <span style={{ fontSize: 14, fontWeight: 500, color: upfront ? "var(--color-muted)" : "var(--color-foreground)" }}>
               Monthly
             </span>
             <label style={{ position: "relative", display: "inline-block", width: 44, height: 24, cursor: "pointer" }}>
               <input
                 type="checkbox"
-                checked={annual}
-                onChange={() => setAnnual(!annual)}
+                checked={upfront}
+                onChange={() => setUpfront(!upfront)}
                 style={{ opacity: 0, width: 0, height: 0 }}
               />
               <span style={{
                 position: "absolute",
                 inset: 0,
-                background: annual ? "var(--color-accent)" : "var(--color-border)",
+                background: upfront ? "var(--color-accent)" : "var(--color-border)",
                 borderRadius: 24,
                 transition: "background 0.2s",
               }}>
@@ -174,7 +160,7 @@ export default function PricingPage() {
                   position: "absolute",
                   width: 18,
                   height: 18,
-                  left: annual ? 23 : 3,
+                  left: upfront ? 23 : 3,
                   top: 3,
                   background: "white",
                   borderRadius: "50%",
@@ -182,8 +168,8 @@ export default function PricingPage() {
                 }} />
               </span>
             </label>
-            <span style={{ fontSize: 14, fontWeight: 500, color: annual ? "var(--color-foreground)" : "var(--color-muted)" }}>
-              Annual{" "}
+            <span style={{ fontSize: 14, fontWeight: 500, color: upfront ? "var(--color-foreground)" : "var(--color-muted)" }}>
+              Six months upfront{" "}
               <span style={{
                 fontSize: 11,
                 fontWeight: 600,
@@ -195,7 +181,7 @@ export default function PricingPage() {
                 padding: "3px 8px",
                 marginLeft: 6,
               }}>
-                Save 15%
+                Save 20%
               </span>
             </span>
           </div>
@@ -259,37 +245,21 @@ export default function PricingPage() {
                 </div>
 
                 {/* Price */}
-                {plan.monthly ? (
-                  <div style={{
-                    fontFamily: "var(--font-serif), 'Iowan Old Style', Georgia, serif",
-                    fontSize: 56,
-                    fontWeight: 900,
-                    letterSpacing: "-0.04em",
-                    lineHeight: 1,
-                    color: plan.featured ? "var(--color-background)" : "var(--color-foreground)",
-                    marginBottom: 6,
-                  }}>
-                    <span style={{ fontFamily: "var(--font-sans), system-ui", fontSize: 20, fontWeight: 600, verticalAlign: "top", marginTop: 10, display: "inline-block" }}>£</span>
-                    {annual && plan.annual ? plan.annual : plan.monthly}
-                  </div>
-                ) : (
-                  <div style={{
-                    fontFamily: "var(--font-serif), 'Iowan Old Style', Georgia, serif",
-                    fontSize: 40,
-                    fontWeight: 900,
-                    letterSpacing: "-0.02em",
-                    lineHeight: 1,
-                    color: plan.featured ? "var(--color-background)" : "var(--color-foreground)",
-                    marginBottom: 6,
-                    paddingTop: 8,
-                    paddingBottom: 12,
-                  }}>
-                    Let&rsquo;s talk
-                  </div>
-                )}
+                <div style={{
+                  fontFamily: "var(--font-serif), 'Iowan Old Style', Georgia, serif",
+                  fontSize: 56,
+                  fontWeight: 900,
+                  letterSpacing: "-0.04em",
+                  lineHeight: 1,
+                  color: plan.featured ? "var(--color-background)" : "var(--color-foreground)",
+                  marginBottom: 6,
+                }}>
+                  <span style={{ fontFamily: "var(--font-sans), system-ui", fontSize: 20, fontWeight: 600, verticalAlign: "top", marginTop: 10, display: "inline-block" }}>£</span>
+                  {upfront ? plan.upfront : plan.monthly}
+                </div>
 
                 <div style={{ fontSize: 13, color: plan.featured ? "oklch(60% 0.018 75)" : "var(--color-muted)", marginBottom: 8 }}>
-                  {plan.period}
+                  {upfront ? `for six months upfront (saves £${plan.saving})` : plan.period}
                 </div>
 
                 <p style={{
@@ -346,14 +316,14 @@ export default function PricingPage() {
         <div className="wrap">
           <div className="section-header" style={{ textAlign: "center" }}>
             <p className="eyebrow" style={{ textAlign: "center" }}>Full Comparison</p>
-            <h2>What&rsquo;s included at each tier.</h2>
+            <h2>What is included at each tier.</h2>
           </div>
           <div style={{ overflowX: "auto", border: "1px solid var(--color-border)", borderRadius: 12, overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
               <thead>
                 <tr>
                   <th style={{ background: "var(--color-foreground)", color: "var(--color-background)", padding: "16px 24px", textAlign: "left", fontFamily: "var(--font-serif), 'Iowan Old Style', Georgia, serif", fontSize: 15, letterSpacing: "-0.01em" }}>Feature</th>
-                  {["Starter", "Growth", "Enterprise"].map((h) => (
+                  {["Starter", "Growth", "Scale"].map((h) => (
                     <th key={h} style={{ background: "var(--color-foreground)", color: "var(--color-background)", padding: "16px 24px", fontWeight: 600, fontSize: 13, textAlign: "center" }}>{h}</th>
                   ))}
                 </tr>
@@ -393,8 +363,29 @@ export default function PricingPage() {
         </div>
       </section>
 
+      {/* ══ EXTRAS SECTION ══ */}
+      <section style={{ padding: "96px 0", borderTop: "1px solid var(--color-border)" }}>
+        <div className="wrap page-hero-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64 }}>
+          <div>
+            <h3 style={{ fontSize: 24, marginBottom: 12 }}>What is not in the price.</h3>
+            <p style={{ fontSize: 15, color: "var(--color-muted)", lineHeight: 1.75 }}>
+              There are no add ons. There are no surcharges for unsubscribed contacts the way Mailchimp bills them. There are no overage fees if your campaigns perform well and generate more responses than expected. The price you see is the price you pay every month.
+            </p>
+            <p style={{ fontSize: 15, color: "var(--color-muted)", lineHeight: 1.75, marginTop: 16 }}>
+              Your card is billed on the day you sign up and on the same date every month thereafter, or once for six months if you choose the upfront option. The minimum commitment is six months. After the minimum term, you may cancel at any time with thirty days notice.
+            </p>
+          </div>
+          <div>
+            <h3 style={{ fontSize: 24, marginBottom: 12 }}>Fourteen day cooling off period.</h3>
+            <p style={{ fontSize: 15, color: "var(--color-muted)", lineHeight: 1.75 }}>
+              Under UK consumer law, you have fourteen days from the date of sign up to cancel and receive a full refund. After fourteen days, the six month minimum commitment applies.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* ══ FAQ ══ */}
-      <section style={{ padding: "96px 0" }}>
+      <section style={{ padding: "96px 0", borderTop: "1px solid var(--color-border)" }}>
         <div className="wrap">
           <div className="section-header" style={{ textAlign: "center" }}>
             <p className="eyebrow" style={{ textAlign: "center" }}>Questions</p>
@@ -474,10 +465,10 @@ export default function PricingPage() {
                 Not sure which plan fits?
               </h2>
               <p style={{ marginTop: 12, fontSize: 16, color: "oklch(70% 0.018 75)", maxWidth: 420 }}>
-                Book a 30-minute call and we&rsquo;ll map out exactly what&rsquo;s right for your stage. No pressure, no generic deck — just an honest conversation about your pipeline.
+                Book a 20 minute call and we&rsquo;ll map out exactly what&rsquo;s right for your stage. No pressure, no generic deck — just an honest conversation about your pipeline.
               </p>
             </div>
-            <Link href="/contact" className="btn btn-warm btn-lg">Book a discovery call</Link>
+            <Link href="/contact" className="btn btn-warm btn-lg">Book a call</Link>
           </div>
         </div>
       </section>

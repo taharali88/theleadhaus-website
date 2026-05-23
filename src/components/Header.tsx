@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 
 const navLinks = [
   { href: "/how-it-works", label: "How It Works" },
-  { href: "/#services",    label: "Services" },
   { href: "/pricing",      label: "Pricing" },
+  { href: "/faq",          label: "FAQ" },
   { href: "/contact",      label: "Contact" },
 ];
 
@@ -48,7 +48,7 @@ export function Header() {
               flexShrink: 0,
             }}
           >
-            LeadHaus
+            Leadhaus
           </Link>
 
           {/* Desktop nav */}

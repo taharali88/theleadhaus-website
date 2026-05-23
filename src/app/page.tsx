@@ -2,82 +2,18 @@
 
 import Link from "next/link";
 import { Reveal, ScaleIn } from "@/components/Motion";
-import { SavingsCalculator } from "@/components/ProductWidgets";
-
-
-const services = [
-  {
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--color-accent)" strokeWidth="1.4">
-        <circle cx="9" cy="9" r="6.5"/>
-        <path d="M9 5.5v3.5l2 2"/>
-      </svg>
-    ),
-    title: "Outbound Lead Generation",
-    body: "Targeted, personalised outreach sequences to your ideal customers across email, LinkedIn, and phone — managed entirely by our team.",
-  },
-  {
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--color-accent)" strokeWidth="1.4">
-        <circle cx="7" cy="7" r="4.5"/>
-        <path d="M15 15l-3.5-3.5"/>
-      </svg>
-    ),
-    title: "ICP & Market Mapping",
-    body: "Deep research into your addressable market — identifying the right contacts, companies, and timing signals before a single message is sent.",
-  },
-  {
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--color-accent)" strokeWidth="1.4">
-        <path d="M3 5h12M3 9h8M3 13h10"/>
-      </svg>
-    ),
-    title: "Messaging & Copy",
-    body: "Bespoke positioning and copy for every channel. We write to your buyer's priorities — never generic templates.",
-  },
-  {
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--color-accent)" strokeWidth="1.4">
-        <path d="M3 13.5l4-4 3 3 5-6"/>
-      </svg>
-    ),
-    title: "Pipeline Reporting",
-    body: "Realtime dashboards showing opens, replies, meetings booked, and pipeline value — full transparency on what's working.",
-  },
-  {
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--color-accent)" strokeWidth="1.4">
-        <circle cx="6.5" cy="6.5" r="3"/>
-        <path d="M12 15a4 4 0 0 0-7.8 0"/>
-        <path d="M14.5 9.5a2.5 2.5 0 1 0 0-5"/>
-      </svg>
-    ),
-    title: "SDR as a Service",
-    body: "A fully embedded, dedicated SDR function without the overhead of hiring. Ramp in weeks, not months, with zero onboarding risk.",
-  },
-  {
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--color-accent)" strokeWidth="1.4">
-        <rect x="2" y="4" width="14" height="11" rx="1.5"/>
-        <path d="M5 4V3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v1"/>
-      </svg>
-    ),
-    title: "CRM Integration",
-    body: "Seamless sync with Salesforce, HubSpot, Pipedrive, and others — every lead logged, scored, and routed automatically.",
-  },
-];
 
 const comparisonRows = [
-  { feature: "Provides fresh leads",                  lh: "Yes", mc: "No",      ml: "No",   br: "No",      eo: "No",  negative: false },
-  { feature: "Sends the outreach for you",             lh: "Yes", mc: "No",      ml: "No",   br: "No",      eo: "No",  negative: false },
-  { feature: "Plain English reporting",                lh: "Yes", mc: "No",      ml: "No",   br: "No",      eo: "No",  negative: false },
-  { feature: "Charges per contact",                   lh: "No",  mc: "Yes",     ml: "Yes",  br: "Partial", eo: "Yes", negative: true  },
-  { feature: "Hidden fees for unsubscribed contacts", lh: "No",  mc: "Yes",     ml: "No",   br: "No",      eo: "No",  negative: true  },
-  { feature: "Bring your own list required",          lh: "No",  mc: "Yes",     ml: "Yes",  br: "Yes",     eo: "Yes", negative: true  },
+  { feature: "Provides fresh leads",                  lh: "Yes", mc: "No",  ml: "No",  br: "No",      eo: "No",  negative: false },
+  { feature: "Sends the outreach for you",             lh: "Yes", mc: "No",  ml: "No",  br: "No",      eo: "No",  negative: false },
+  { feature: "Plain English reporting",                lh: "Yes", mc: "No",  ml: "No",  br: "No",      eo: "No",  negative: false },
+  { feature: "Charges per contact",                   lh: "No",  mc: "Yes", ml: "Yes", br: "Partial", eo: "Yes", negative: true  },
+  { feature: "Hidden fees for unsubscribed contacts", lh: "No",  mc: "Yes", ml: "No",  br: "No",      eo: "No",  negative: true  },
+  { feature: "Bring your own list required",          lh: "No",  mc: "Yes", ml: "Yes", br: "Yes",     eo: "Yes", negative: true  },
 ];
 
-const GREEN = "oklch(35% 0.10 155)";
-const RED   = "oklch(50% 0.18 22)";
+const GREEN = "oklch(59% 0.130 34)"; // rust/accent for positive
+const RED   = "oklch(47% 0.020 58)"; // muted brown for negative
 
 const TickIcon = ({ color }: { color: string }) => (
   <svg style={{ display: "inline-block", verticalAlign: "middle", color }} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -92,175 +28,340 @@ const CrossIcon = ({ color }: { color: string }) => (
   </svg>
 );
 
-const checkCell = (val: string, isLeadHaus: boolean, negative: boolean) => {
-  if (isLeadHaus) {
-    // LeadHaus is always the winner — green tick regardless of Yes/No
+const checkCell = (val: string, isLeadhaus: boolean, negative: boolean) => {
+  if (isLeadhaus) {
     return <TickIcon color={GREEN} />;
   }
 
   if (val === "Partial") {
-    return <span style={{ color: "var(--color-muted)", fontSize: 12 }}>Partial</span>;
+    return <span style={{ color: "var(--color-muted)", fontSize: 13, fontWeight: 500 }}>Partial</span>;
   }
 
   const isBad = negative ? val === "Yes" : val === "No";
 
   if (isBad) {
-    return (
-      <CrossIcon color={RED} />
-    );
+    return <CrossIcon color={RED} />;
   }
 
-  // Competitor has the positive value (e.g. they do provide this feature)
   return <TickIcon color={GREEN} />;
 };
+
+/* ═══════════════════════════════════════════════════
+   HIGH FIDELITY OUTBOUND COCKPIT MOCKUP
+   ═══════════════════════════════════════════════════ */
+function OutboundCockpitMockup() {
+  return (
+    <div style={{
+      width: "100%",
+      maxWidth: 960,
+      margin: "48px auto 0",
+      background: "var(--color-surface)",
+      border: "1px solid var(--color-border)",
+      borderRadius: 12,
+      boxShadow: "0 12px 40px oklch(17% 0.024 58 / 0.06)",
+      overflow: "hidden",
+      textAlign: "left"
+    }}>
+      {/* Browser window header */}
+      <div style={{
+        padding: "14px 20px",
+        background: "var(--color-background)",
+        borderBottom: "1px solid var(--color-border)",
+        display: "flex",
+        alignItems: "center",
+        gap: 16
+      }}>
+        {/* Window controls */}
+        <div style={{ display: "flex", gap: 6 }}>
+          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "oklch(80% 0.02 58)" }} />
+          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "oklch(80% 0.02 58)" }} />
+          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "oklch(80% 0.02 58)" }} />
+        </div>
+        {/* Address bar */}
+        <div style={{
+          flex: 1,
+          maxWidth: 480,
+          background: "var(--color-surface)",
+          border: "1px solid var(--color-border)",
+          borderRadius: 6,
+          padding: "4px 12px",
+          fontSize: 12,
+          fontFamily: "var(--font-sans), monospace",
+          color: "var(--color-body)",
+          display: "flex",
+          alignItems: "center",
+          gap: 6
+        }}>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" style={{ color: "var(--color-accent)" }}>
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          app.leadhaus.io/dashboard
+        </div>
+      </div>
+
+      {/* Main workspace layout */}
+      <div style={{ display: "flex", minHeight: 440 }}>
+        {/* Left app navigation */}
+        <div style={{
+          width: 180,
+          borderRight: "1px solid var(--color-border)",
+          background: "var(--color-surface)",
+          padding: "20px 14px",
+          display: "flex",
+          flexDirection: "column",
+          gap: 20
+        }}>
+          <div style={{ fontFamily: "var(--font-serif)", fontSize: 16, fontWeight: 700, color: "var(--color-foreground)", paddingLeft: 6 }}>
+            Leadhaus
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            {[
+              { name: "Dashboard", active: true },
+              { name: "Sourced Leads", active: false },
+              { name: "Campaigns", active: false },
+              { name: "Monday Reports", active: false },
+              { name: "Settings", active: false }
+            ].map((tab) => (
+              <div key={tab.name} style={{
+                fontSize: 12,
+                fontWeight: tab.active ? 600 : 500,
+                color: tab.active ? "var(--color-accent)" : "var(--color-body)",
+                padding: "8px 10px",
+                borderRadius: 6,
+                background: tab.active ? "var(--color-accent-bg)" : "transparent",
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                cursor: "default"
+              }}>
+                {tab.active && <div style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--color-accent)" }} />}
+                {tab.name}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right dashboard area */}
+        <div style={{ flex: 1, padding: 24, background: "var(--color-surface)" }}>
+          {/* KPI metrics row */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 24 }}>
+            {[
+              { label: "Total Leads", val: "237,000", sub: "Exclusive database" },
+              { label: "Sourced Daily", val: "30,000", sub: "Fresh live additions" },
+              { label: "Average Open Rate", val: "42%", sub: "Campaign performance" },
+              { label: "Deliverability", val: "77%", sub: "Monitored infrastructure" }
+            ].map((kpi) => (
+              <div key={kpi.label} style={{
+                background: "var(--color-background)",
+                border: "1px solid var(--color-border)",
+                borderRadius: 8,
+                padding: 16
+              }}>
+                <div style={{ fontSize: 11, fontWeight: 600, color: "var(--color-muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>{kpi.label}</div>
+                <div style={{ fontFamily: "var(--font-serif)", fontSize: 24, fontWeight: 700, color: "var(--color-foreground)", margin: "4px 0 2px" }}>{kpi.val}</div>
+                <div style={{ fontSize: 10, color: "var(--color-muted)" }}>{kpi.sub}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Sourced leads & Inbox logs grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 16 }}>
+            {/* Sourced leads feed */}
+            <div style={{
+              background: "var(--color-background)",
+              border: "1px solid var(--color-border)",
+              borderRadius: 8,
+              padding: 16
+            }}>
+              <h4 style={{ fontSize: 13, fontWeight: 600, color: "var(--color-foreground)", marginBottom: 12 }}>Sourced live this week</h4>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {[
+                  { name: "James Mitchell", title: "Managing Director", company: "Apex Group", trigger: "New incorporation" },
+                  { name: "Sarah Chen", title: "VP Sales", company: "Meridian Capital", trigger: "Planning portal filing" },
+                  { name: "David Park", title: "Operations Director", company: "Westbridge Ltd", trigger: "Land Registry filing" }
+                ].map((lead, i) => (
+                  <div key={i} style={{
+                    background: "var(--color-surface)",
+                    padding: "10px 12px",
+                    border: "1px solid var(--color-border)",
+                    borderRadius: 6,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    fontSize: 11
+                  }}>
+                    <div>
+                      <div style={{ fontWeight: 600, color: "var(--color-foreground)" }}>{lead.name}</div>
+                      <div style={{ color: "var(--color-muted)", fontSize: 10 }}>{lead.title} at {lead.company}</div>
+                    </div>
+                    <span style={{
+                      fontSize: 9,
+                      fontWeight: 600,
+                      color: "var(--color-accent)",
+                      background: "var(--color-accent-bg)",
+                      padding: "2px 6px",
+                      borderRadius: 4
+                    }}>
+                      {lead.trigger}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Master Inbox replies feed */}
+            <div style={{
+              background: "var(--color-background)",
+              border: "1px solid var(--color-border)",
+              borderRadius: 8,
+              padding: 16
+            }}>
+              <h4 style={{ fontSize: 13, fontWeight: 600, color: "var(--color-foreground)", marginBottom: 12 }}>Unified Master Inbox</h4>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {[
+                  { sender: "James Mitchell", text: "Yes, we are looking for a GDPR compliant solution. Let's speak Wednesday." },
+                  { sender: "Sarah Chen", text: "This is perfect timing. Let's get a call booked." }
+                ].map((reply, i) => (
+                  <div key={i} style={{
+                    background: "var(--color-surface)",
+                    padding: "10px 12px",
+                    border: "1px solid var(--color-border)",
+                    borderRadius: 6,
+                    fontSize: 11
+                  }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}>
+                      <span style={{ fontWeight: 600, color: "var(--color-foreground)" }}>{reply.sender}</span>
+                      <span style={{ fontSize: 9, color: "var(--color-muted)" }}>Just now</span>
+                    </div>
+                    <div style={{ color: "var(--color-body)", lineHeight: 1.4, fontSize: 10, fontStyle: "italic" }}>
+                      &ldquo;{reply.text}&rdquo;
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function HomePage() {
   return (
     <div>
-
-      {/* ══ HERO ══ */}
-      <section className="hero-video-section">
-        {/* Full-bleed background video */}
-        <video
-          src="/hero-handshake.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="hero-video-bg"
-        />
-        {/* Gradient scrim so text is legible */}
-        <div className="hero-video-scrim" />
-        {/* Text overlay */}
-        <div className="wrap hero-video-content">
-          <p className="eyebrow eyebrow-light">Premium B2B Lead Generation</p>
-          <h1 className="hero-video-h1">
-            Quality Leads.<br />Real Growth.
+      {/* ══ HERO SECTION ══ */}
+      <section style={{ padding: "80px 0 96px", background: "var(--color-background)", borderBottom: "1px solid var(--color-border)" }}>
+        <div className="wrap" style={{ textAlign: "center" }}>
+          <p className="eyebrow" style={{ textAlign: "center" }}>Premium Outbound Pipeline</p>
+          <h1 style={{
+            fontFamily: "var(--font-serif), 'Iowan Old Style', Georgia, serif",
+            fontSize: "clamp(44px, 5.5vw, 76px)",
+            fontWeight: 900,
+            lineHeight: 1.05,
+            color: "var(--color-foreground)",
+            marginBottom: 24,
+            maxWidth: 800,
+            marginLeft: "auto",
+            marginRight: "auto"
+          }}>
+            You need customers, not contacts.
           </h1>
-          <p className="hero-video-sub">
-            We help established B2B companies build consistent, high-quality pipelines — so your sales team can focus on closing, not chasing.
+          <p style={{
+            fontSize: 20,
+            fontWeight: 600,
+            color: "var(--color-body)",
+            lineHeight: 1.6,
+            maxWidth: 720,
+            margin: "0 auto 20px"
+          }}>
+            Mailchimp sends emails. Hubspot tracks pipelines. Salesforce manages accounts. None of them find you a single customer. Leadhaus does.
           </p>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <Link href="/contact" className="btn btn-warm btn-lg">Book a discovery call</Link>
-            <Link href="/how-it-works" className="btn btn-ghost-light btn-lg">See how it works</Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ══ LOGOS ══ */}
-      <section style={{ padding: "48px 0 64px", borderTop: "1px solid var(--color-border)" }}>
-        <div className="wrap">
-          <p style={{ textAlign: "center", fontSize: 11, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--color-muted)", marginBottom: 28 }}>
-            Trusted by growth teams at
+          <p style={{
+            fontSize: 15,
+            color: "var(--color-muted)",
+            lineHeight: 1.7,
+            maxWidth: 720,
+            margin: "0 auto 40px"
+          }}>
+            We figure out exactly who your buyers are, where they spend their time, and what they need right now. Then we put your offer in front of them and bring the enquiries to your inbox. One fixed price every month. No software to learn. No list of your own required. Just customers landing in your inbox each week.
           </p>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 48, flexWrap: "wrap" }}>
-            {["Salesforce", "Meta Ads", "HubSpot", "LinkedIn Sales", "Outreach"].map((name) => (
-              <span key={name} className="logo-mark">
-                {name}
-              </span>
-            ))}
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            <Link href="/pricing" className="btn btn-warm btn-lg">See pricing</Link>
+            <Link href="/contact" className="btn btn-dark btn-lg">Book a call</Link>
           </div>
+
+          {/* Product showcase dashboard */}
+          <OutboundCockpitMockup />
         </div>
       </section>
 
-      {/* ══ STATS ══ */}
-      <section style={{ padding: "96px 0" }}>
-        <div className="wrap">
-          <div className="stats-grid">
-            {[
-              { n: "250+", l: "Clients across 14 industries" },
-              { n: "2M+",  l: "Qualified leads delivered" },
-              { n: "35%",  l: "Average pipeline lift in 90 days" },
-            ].map((stat) => (
-              <div key={stat.n} style={{ background: "var(--color-surface)", padding: "52px 40px", textAlign: "center" }}>
-                <div style={{
-                  fontFamily: "var(--font-serif), 'Iowan Old Style', Georgia, serif",
-                  fontSize: "clamp(52px, 5.5vw, 76px)",
-                  fontWeight: 700,
-                  letterSpacing: "-0.04em",
-                  lineHeight: 1,
-                  color: "var(--color-foreground)",
-                  marginBottom: 8,
-                }}>
-                  {stat.n}
-                </div>
-                <div style={{ fontSize: 14, color: "var(--color-muted)", fontWeight: 500 }}>{stat.l}</div>
-              </div>
-            ))}
-          </div>
+      {/* ══ SECTION 2: THE PROBLEM WITH OTHER TOOLS ══ */}
+      <section style={{ padding: "96px 0", background: "var(--color-surface)", borderBottom: "1px solid var(--color-border)" }}>
+        <div className="wrap" style={{ maxWidth: 800 }}>
+          <Reveal>
+            <div className="section-header" style={{ marginBottom: 32 }}>
+              <p className="eyebrow">The Outbound Problem</p>
+              <h2 style={{ fontFamily: "var(--font-serif)", fontSize: 36, fontWeight: 700 }}>Everyone else is just a postman.</h2>
+            </div>
+            <div style={{ fontSize: 17, color: "var(--color-muted)", lineHeight: 1.8, display: "flex", flexDirection: "column", gap: 20 }}>
+              <p>
+                Mailchimp, MailerLite, Brevo, EmailOctopus, SendX. All of them are sending tools. They wait for you to upload a list, then they deliver to it. If you do not have a list, they cannot help you. If your list is stale or has been hammered by every other marketer who bought the same data, they cannot help you either.
+              </p>
+              <p>
+                The problem is that finding the right people to email is the hard part. Sending the email is trivial. Yet the entire industry has built itself around the trivial part and ignored the hard part.
+              </p>
+              <p style={{ fontWeight: 700, color: "var(--color-foreground)", fontSize: 20, fontFamily: "var(--font-serif), Georgia, serif" }}>
+                Leadhaus does the hard part.
+              </p>
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* ══ HOW IT WORKS ══ */}
-      <section style={{ padding: "96px 0" }}>
+      {/* ══ SECTION 3: HOW WE ARE DIFFERENT ══ */}
+      <section style={{ padding: "96px 0", background: "var(--color-background)", borderBottom: "1px solid var(--color-border)" }}>
         <div className="wrap">
           <Reveal>
             <div className="section-header">
-              <p className="eyebrow">The System</p>
-              <h2>A proven system for predictable growth.</h2>
-              <p>We replace guesswork with a repeatable, data driven process — from ICP mapping to qualified introductions delivered to your calendar.</p>
+              <p className="eyebrow">How We Operate</p>
+              <h2 style={{ fontFamily: "var(--font-serif)" }}>We find them. We send to them. You get the enquiries.</h2>
             </div>
           </Reveal>
 
-          <div className="steps-grid">
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: 24,
+            marginTop: 48
+          }} className="steps-grid">
             {[
-              { n: "01", title: "Target", body: "We define your ideal customer profile with surgical precision — industry, headcount, revenue, buying signals, and trigger events that indicate readiness." },
-              { n: "02", title: "Engage", body: "Our team runs multichannel outreach across email, LinkedIn, and phone — using sequencing logic refined across 250+ live campaigns." },
-              { n: "03", title: "Deliver", body: "Warm, qualified introductions land in your calendar. Decision makers who've expressed interest, verified in role, ready for a real conversation." },
-            ].map((step, i) => (
-              <Reveal key={step.n} delay={i * 0.08}>
-                <div>
+              {
+                title: "Fresh leads, built for you",
+                body: "Every lead in your database is found live, this week, specifically for your business. No recycled lists. No data that ten other companies have already burned through. Yours and yours alone."
+              },
+              {
+                title: "Sent for you, not by you",
+                body: "We run the outreach from our infrastructure on your behalf. Throttled at safe volumes to protect deliverability. Sequenced based on how recipients behave. You never touch a sending tool."
+              },
+              {
+                title: "Reported in plain English",
+                body: "Every Monday morning you get a one page summary showing how many leads were contacted, how many opened, how many replied, how many booked a call. No jargon. No graphs you need a degree to read."
+              }
+            ].map((col, i) => (
+              <Reveal key={col.title} delay={i * 0.08}>
+                <div style={{ background: "var(--color-surface)", padding: "40px 36px", border: "1px solid var(--color-border)", borderRadius: 12 }}>
                   <div style={{
-                    fontFamily: "var(--font-serif), 'Iowan Old Style', Georgia, serif",
-                    fontSize: 56,
-                    fontWeight: 900,
-                    color: "var(--color-border)",
-                    lineHeight: 1,
+                    fontFamily: "var(--font-serif), Georgia, serif",
+                    fontSize: 22,
+                    fontWeight: 700,
+                    color: "var(--color-foreground)",
                     marginBottom: 16,
-                    letterSpacing: "-0.04em",
                   }}>
-                    {step.n}
+                    {col.title}
                   </div>
-                  <h3 style={{ marginBottom: 10 }}>{step.title}</h3>
-                  <p style={{ fontSize: 15, color: "var(--color-muted)", lineHeight: 1.7 }}>{step.body}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <div style={{ marginTop: 48 }}>
-            <Link href="/how-it-works" className="btn btn-outline">Full process breakdown →</Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ══ SERVICES ══ */}
-      <section id="services" style={{ padding: "96px 0", background: "var(--color-surface)" }}>
-        <div className="wrap">
-          <Reveal>
-            <div className="section-header">
-              <p className="eyebrow">Services</p>
-              <h2>Lead generation services that deliver.</h2>
-            </div>
-          </Reveal>
-          <div className="services-grid">
-            {services.map((svc, i) => (
-              <Reveal key={svc.title} delay={i * 0.06}>
-                <div className="svc-card">
-                  <div style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: "50%",
-                    border: "1.5px solid var(--color-border)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: 20,
-                  }}>
-                    {svc.icon}
-                  </div>
-                  <h3 style={{ fontSize: 19, marginBottom: 10 }}>{svc.title}</h3>
-                  <p style={{ fontSize: 14, color: "var(--color-muted)", lineHeight: 1.7 }}>{svc.body}</p>
+                  <p style={{ fontSize: 15, color: "var(--color-body)", lineHeight: 1.75 }}>{col.body}</p>
                 </div>
               </Reveal>
             ))}
@@ -268,54 +369,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══ TESTIMONIAL ══ */}
-      <section style={{ padding: "96px 0" }}>
-        <div className="wrap">
-          <div className="testi-grid">
-            <div>
-              <div style={{
-                width: 60,
-                height: 60,
-                borderRadius: "50%",
-                background: "var(--color-accent-bg)",
-                border: "2px solid var(--color-accent)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontFamily: "var(--font-serif), 'Iowan Old Style', Georgia, serif",
-                fontSize: 18,
-                fontWeight: 700,
-                color: "var(--color-accent)",
-                marginBottom: 16,
-              }}>
-                MR
-              </div>
-              <div style={{ fontSize: 15, fontWeight: 600, color: "var(--color-foreground)", marginBottom: 4 }}>Marcus Reid</div>
-              <div style={{ fontSize: 13, color: "var(--color-muted)" }}>VP Sales, Meridian Capital</div>
-            </div>
-            <blockquote style={{
-              fontFamily: "var(--font-serif), 'Iowan Old Style', Georgia, serif",
-              fontSize: "clamp(22px, 2.5vw, 32px)",
-              fontWeight: 700,
-              lineHeight: 1.4,
-              color: "var(--color-foreground)",
-              letterSpacing: "-0.01em",
-              borderLeft: "3px solid var(--color-accent)",
-              paddingLeft: 32,
-            }}>
-              &ldquo;LeadHaus gave us 47 qualified meetings in the first 60 days. Our previous agency took six months to get half that. The quality of contact — title, timing, context — was in another league entirely.&rdquo;
-            </blockquote>
-          </div>
-        </div>
-      </section>
-
-      {/* ══ COMPARISON TABLE ══ */}
-      <section style={{ padding: "96px 0", background: "var(--color-surface)", borderTop: "1px solid var(--color-border)" }}>
+      {/* ══ SECTION 4: THE COMPARISON ══ */}
+      <section style={{ padding: "96px 0", background: "var(--color-surface)", borderBottom: "1px solid var(--color-border)" }}>
         <div className="wrap">
           <Reveal>
             <div className="section-header">
               <p className="eyebrow">Comparing options</p>
-              <h2>What you actually get for your money.</h2>
+              <h2 style={{ fontFamily: "var(--font-serif)" }}>What you actually get for your money.</h2>
             </div>
           </Reveal>
           <Reveal delay={0.1}>
@@ -324,9 +384,9 @@ export default function HomePage() {
                 <thead>
                   <tr>
                     <th style={{ background: "var(--color-foreground)", color: "var(--color-background)", padding: "16px 24px", fontWeight: 600, fontSize: 13 }}>Feature</th>
-                    {["LeadHaus", "Mailchimp", "MailerLite", "Brevo", "EmailOctopus"].map((h, i) => (
+                    {["Leadhaus", "Mailchimp", "MailerLite", "Brevo", "EmailOctopus"].map((h, i) => (
                       <th key={h} style={{
-                        background: i === 0 ? "var(--color-foreground)" : "var(--color-foreground)",
+                        background: "var(--color-foreground)",
                         color: i === 0 ? "var(--color-accent)" : "var(--color-background)",
                         padding: "16px 24px",
                         fontWeight: i === 0 ? 700 : 500,
@@ -338,9 +398,9 @@ export default function HomePage() {
                 </thead>
                 <tbody>
                   {comparisonRows.map((row, i) => (
-                    <tr key={i} className="compare-row" style={{ borderBottom: "1px solid var(--color-border)" }}>
+                    <tr key={i} className="compare-row" style={{ borderBottom: "1px solid var(--color-border)", background: "var(--color-surface)" }}>
                       <td style={{ padding: "14px 24px", fontWeight: 500, color: "var(--color-foreground)" }}>{row.feature}</td>
-                      <td style={{ padding: "14px 24px", textAlign: "center", background: "oklch(59% 0.130 34 / 0.05)", fontWeight: 700 }}>{checkCell(row.lh, true,  row.negative)}</td>
+                      <td style={{ padding: "14px 24px", textAlign: "center", background: "oklch(59% 0.130 34 / 0.03)", fontWeight: 700 }}>{checkCell(row.lh, true,  row.negative)}</td>
                       <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkCell(row.mc, false, row.negative)}</td>
                       <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkCell(row.ml, false, row.negative)}</td>
                       <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkCell(row.br, false, row.negative)}</td>
@@ -349,7 +409,7 @@ export default function HomePage() {
                   ))}
                   <tr style={{ background: "var(--color-background)", fontWeight: 600 }}>
                     <td style={{ padding: "14px 24px", color: "var(--color-foreground)" }}>Starting monthly price for 25,000 contacts</td>
-                    <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-accent)", background: "oklch(59% 0.130 34 / 0.05)" }}>£497</td>
+                    <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-accent)", background: "oklch(59% 0.130 34 / 0.03)" }}>£497</td>
                     <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-muted)" }}>$270</td>
                     <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-muted)" }}>$145</td>
                     <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-muted)" }}>$69 to $499</td>
@@ -359,40 +419,94 @@ export default function HomePage() {
               </table>
             </div>
             <p style={{ marginTop: 16, fontSize: 12, color: "var(--color-muted)", lineHeight: 1.65, maxWidth: 720 }}>
-              Prices for competitors verified April 2026 from each provider&rsquo;s published rates. They charge less for sending alone because that is all they do. LeadHaus includes the lead generation, the sending, and the reporting as one fixed price.
+              Prices for competitors verified April 2026 from each provider&rsquo;s published rates. They charge less for sending alone because that is all they do. Leadhaus includes the lead generation, the sending, and the reporting as one fixed price.
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* ══ COST CALCULATOR ══ */}
-      <section style={{ padding: "96px 0" }}>
+      {/* ══ SECTION 5: WHO LEADHAUS IS FOR ══ */}
+      <section style={{ padding: "96px 0", background: "var(--color-background)", borderBottom: "1px solid var(--color-border)" }}>
         <div className="wrap">
-          <div style={{ maxWidth: 800, margin: "0 auto" }}>
+          <Reveal>
+            <div className="section-header">
+              <p className="eyebrow">Audience Focus</p>
+              <h2 style={{ fontFamily: "var(--font-serif)" }}>If you sell to businesses or to consumers, we work for you.</h2>
+            </div>
+          </Reveal>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32, marginTop: 48 }} className="page-hero-grid">
             <Reveal>
-              <div className="section-header" style={{ textAlign: "center" }}>
-                <p className="eyebrow" style={{ textAlign: "center" }}>Cost calculator</p>
-                <h2>Compare your options</h2>
+              <div style={{ background: "var(--color-surface)", padding: "44px 40px", border: "1px solid var(--color-border)", borderRadius: 12, height: "100%" }}>
+                <p className="eyebrow">B2B Markets</p>
+                <h3 style={{ fontFamily: "var(--font-serif)", fontSize: 24, marginBottom: 16 }}>Selling to businesses</h3>
+                <p style={{ fontSize: 15, color: "var(--color-body)", lineHeight: 1.75 }}>
+                  Solicitors, accountants, recruiters, agencies, consultants, B2B services. We find decision makers by job title, industry, company size, and geography. Verified contact data delivered into your sending sequence every week.
+                </p>
               </div>
             </Reveal>
-            <ScaleIn delay={0.1}>
-              <div style={{
-                background: "var(--color-surface)",
-                border: "1px solid var(--color-border)",
-                borderRadius: 12,
-                padding: 4,
-              }}>
-                <SavingsCalculator />
+            <Reveal delay={0.08}>
+              <div style={{ background: "var(--color-surface)", padding: "44px 40px", border: "1px solid var(--color-border)", borderRadius: 12, height: "100%" }}>
+                <p className="eyebrow">B2C Markets</p>
+                <h3 style={{ fontFamily: "var(--font-serif)", fontSize: 24, marginBottom: 16 }}>Selling to consumers</h3>
+                <p style={{ fontSize: 15, color: "var(--color-body)", lineHeight: 1.75 }}>
+                  Tradespeople, gyms, coaches, local services. We monitor public intent signals such as new home purchases, new business incorporations, planning permission filings, and active social conversations in your area. Warm prospects who have just become buyers for what you sell.
+                </p>
               </div>
-            </ScaleIn>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* ══ DARK CTA STRIP ══ */}
+      {/* ══ SECTION 6: PROOF ══ */}
+      <section style={{ padding: "96px 0", background: "var(--color-surface)", borderBottom: "1px solid var(--color-border)" }}>
+        <div className="wrap">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: 64, alignItems: "start" }} className="page-hero-grid">
+            <div>
+              <Reveal>
+                <p className="eyebrow">Proven Pipeline</p>
+                <h2 style={{ fontFamily: "var(--font-serif)", fontSize: 36, marginBottom: 20 }}>Built and tested on our own business.</h2>
+                <p style={{ fontSize: 15, color: "var(--color-body)", lineHeight: 1.75 }}>
+                  Leadhaus is the engine behind BlockHaus, our crypto real estate platform. In ten weeks of live operation we have built a database of 237,000 verified contacts, growing by approximately 30,000 every day. Open rates average 42 percent. Deliverability sits at 77 percent. Bounce rates stay below 23 percent because the database cleans itself in real time.
+                </p>
+                <p style={{ fontSize: 15, color: "var(--color-body)", lineHeight: 1.75, marginTop: 16 }}>
+                  These are not numbers we read in a case study. They are the numbers our own infrastructure produces every day. We use Leadhaus on Leadhaus.
+                </p>
+              </Reveal>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }} className="stats-grid">
+              {[
+                { n: "237,000", l: "verified contacts and growing" },
+                { n: "30,000",  l: "new contacts added daily" },
+                { n: "42%",     l: "average open rate" },
+                { n: "77%",     l: "deliverability across all sends" },
+              ].map((stat, i) => (
+                <Reveal key={stat.l} delay={i * 0.05}>
+                  <div style={{ background: "var(--color-background)", padding: "32px 24px", textAlign: "center", border: "1px solid var(--color-border)", borderRadius: 12 }}>
+                    <div style={{
+                      fontFamily: "var(--font-serif), Georgia, serif",
+                      fontSize: "clamp(28px, 3.5vw, 42px)",
+                      fontWeight: 700,
+                      letterSpacing: "-0.03em",
+                      lineHeight: 1.1,
+                      color: "var(--color-foreground)",
+                      marginBottom: 8,
+                    }}>
+                      {stat.n}
+                    </div>
+                    <div style={{ fontSize: 12, color: "var(--color-muted)", fontWeight: 500, lineHeight: 1.4 }}>{stat.l}</div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ SECTION 7: FINAL CTA ══ */}
       <section style={{ padding: "96px 0", background: "var(--color-foreground)" }}>
         <div className="wrap">
-          <div className="cta-dark-grid">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 48, alignItems: "center" }} className="page-hero-grid">
             <div>
               <h2 style={{
                 fontFamily: "var(--font-serif), 'Iowan Old Style', Georgia, serif",
@@ -402,147 +516,21 @@ export default function HomePage() {
                 lineHeight: 1.15,
                 color: "var(--color-background)",
               }}>
-                Let&rsquo;s build your pipeline.
+                Stop renting lists. Start receiving customers.
               </h2>
-              <p style={{ marginTop: 12, fontSize: 16, color: "oklch(70% 0.018 75)", maxWidth: 420 }}>
-                Book a 30 minute discovery call and leave with a clear view of where your next 50 meetings are coming from.
+              <p style={{ marginTop: 12, fontSize: 16, color: "oklch(75% 0.015 76)", maxWidth: 520 }}>
+                Pick a plan that matches your business. Tell us who you sell to. Within two weeks you will have a working pipeline delivering enquiries to your inbox.
               </p>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10, minWidth: 272 }}>
-              <input
-                type="email"
-                placeholder="Work email address"
-                style={{
-                  padding: "12px 16px",
-                  border: "1px solid oklch(35% 0.020 58)",
-                  borderRadius: 8,
-                  background: "oklch(24% 0.020 58)",
-                  color: "var(--color-background)",
-                  fontSize: 14,
-                  outline: "none",
-                  fontFamily: "var(--font-sans), system-ui, sans-serif",
-                }}
-              />
-              <Link href="/contact" className="btn btn-warm">Book discovery call</Link>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap", minWidth: 270 }}>
+              <Link href="/pricing" className="btn btn-warm btn-lg">See pricing</Link>
+              <Link href="/contact" className="btn btn-ghost-light btn-lg">Book a twenty minute call</Link>
             </div>
           </div>
         </div>
       </section>
 
       <style>{`
-        .logo-mark {
-          font-family: var(--font-serif), 'Iowan Old Style', Georgia, serif;
-          font-size: 15px;
-          font-weight: 700;
-          color: var(--color-border);
-          letter-spacing: -0.01em;
-          transition: color 0.2s;
-          cursor: default;
-        }
-        .logo-mark:hover { color: var(--color-muted); }
-        .compare-row:hover td { background: var(--color-background); }
-        .hero-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 80px;
-          align-items: center;
-        }
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          background: var(--color-border);
-          gap: 1px;
-          border: 1px solid var(--color-border);
-          border-radius: 12px;
-          overflow: hidden;
-        }
-        .steps-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 52px;
-        }
-        .services-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          background: var(--color-border);
-          gap: 1px;
-          border: 1px solid var(--color-border);
-          border-radius: 12px;
-          overflow: hidden;
-        }
-        .svc-card {
-          background: var(--color-surface);
-          padding: 40px 36px;
-          transition: background 0.2s;
-        }
-        .svc-card:hover { background: var(--color-background); }
-        .testi-grid {
-          display: grid;
-          grid-template-columns: 220px 1fr;
-          gap: 80px;
-          align-items: start;
-        }
-        .cta-dark-grid {
-          display: grid;
-          grid-template-columns: 1fr auto;
-          gap: 48px;
-          align-items: center;
-        }
-        /* ── Full-bleed video hero ── */
-        .hero-video-section {
-          position: relative;
-          min-height: 92vh;
-          display: flex;
-          align-items: center;
-          overflow: hidden;
-        }
-        .hero-video-bg {
-          position: absolute;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          object-position: center center;
-          z-index: 0;
-        }
-        .hero-video-scrim {
-          position: absolute;
-          inset: 0;
-          z-index: 1;
-          background: linear-gradient(
-            to right,
-            oklch(12% 0.025 55 / 0.78) 0%,
-            oklch(12% 0.025 55 / 0.55) 45%,
-            oklch(12% 0.025 55 / 0.10) 75%,
-            transparent 100%
-          );
-        }
-        .hero-video-content {
-          position: relative;
-          z-index: 2;
-          padding-top: 100px;
-          padding-bottom: 100px;
-          max-width: 620px;
-        }
-        .eyebrow-light {
-          color: oklch(85% 0.08 55) !important;
-        }
-        .hero-video-h1 {
-          font-family: var(--font-serif), 'Iowan Old Style', Georgia, serif;
-          font-size: clamp(52px, 6vw, 88px);
-          font-weight: 900;
-          letter-spacing: -0.03em;
-          line-height: 1.0;
-          color: #fff;
-          margin-bottom: 28px;
-        }
-        .hero-video-sub {
-          font-size: 18px;
-          line-height: 1.65;
-          color: oklch(90% 0.015 55);
-          max-width: 480px;
-          margin-bottom: 40px;
-        }
         .btn-ghost-light {
           background: transparent;
           border: 1.5px solid oklch(100% 0 0 / 0.5);
@@ -553,20 +541,13 @@ export default function HomePage() {
           background: oklch(100% 0 0 / 0.12);
           border-color: oklch(100% 0 0 / 0.8);
         }
-        @media (max-width: 768px) {
-          .hero-video-section { min-height: 80vh; }
-          .hero-video-content { max-width: 100%; }
-          .hero-video-scrim {
-            background: oklch(12% 0.025 55 / 0.65);
-          }
-          .services-grid { grid-template-columns: 1fr 1fr; }
-          .steps-grid { grid-template-columns: 1fr; gap: 40px; }
-          .testi-grid { grid-template-columns: 1fr; gap: 36px; }
-          .cta-dark-grid { grid-template-columns: 1fr; }
+        @media (max-width: 900px) {
+          .page-hero-grid { grid-template-columns: 1fr !important; gap: 40px; }
+          .stats-grid { grid-template-columns: 1fr 1fr !important; }
         }
         @media (max-width: 640px) {
-          .stats-grid { grid-template-columns: 1fr; }
-          .services-grid { grid-template-columns: 1fr; }
+          .steps-grid { grid-template-columns: 1fr !important; gap: 24px; }
+          .stats-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </div>

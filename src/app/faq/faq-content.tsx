@@ -9,11 +9,11 @@ const faqSections = [
     questions: [
       {
         q: "What is Leadhaus actually doing for me?",
-        a: "Two things at once. First we build you a database of contacts who are likely to buy what you sell, generated fresh and exclusive to your business. Second we run the outreach campaigns from our own infrastructure. You receive the enquiries. You never touch a sending tool.",
+        a: "Two things at once. First we build you a database of people who are likely to buy what you sell, generated fresh and exclusive to your business. Second we run the outreach to them from our own infrastructure. You receive the enquiries. You never touch a sending tool.",
       },
       {
-        q: "How is this different from tools like Mailchimp or Reply.io?",
-        a: "Mailchimp is for sending newsletters to a list you already own. Reply.io and Instantly.ai are cold outreach tools that require you to find your own leads, set up and warm up domains, write copy, and manage the technical system yourself. Leadhaus is a managed service that handles the data, the deliverability, and the execution. You only deal with the replies.",
+        q: "How is this different from Mailchimp or MailerLite?",
+        a: "Mailchimp and MailerLite are sending tools. They assume you already have a list of people to email. If you do not have a list, they cannot help you. Leadhaus generates the list and sends to it. Two services in one fixed price.",
       },
       {
         q: "Will the leads be exclusive to me?",
@@ -42,7 +42,7 @@ const faqSections = [
       },
       {
         q: "Are there any hidden fees?",
-        a: "No. The price you see is the price you pay. There are no charges for unsubscribed contacts, no overage fees, no per email costs, no additional charges.",
+        a: "No. The price you see is the price you pay. There are no charges for unsubscribed contacts, no overage fees, no per email costs, no add on charges.",
       },
     ],
   },
@@ -55,7 +55,7 @@ const faqSections = [
       },
       {
         q: "What about GDPR?",
-        a: "All Leadhaus activity is conducted under the legitimate interest basis permitted by UK GDPR for business to business outreach, and under the soft opt in rules permitted by PECR for consumer contact in specific situations. Every email we send includes a clear unsubscribe option and the sender identification required by law. We provide a full GDPR audit trail in your dashboard.",
+        a: "All Leadhaus activity is conducted under the legitimate interest basis permitted by UK GDPR for B2B outreach, and under the soft opt in rules permitted by PECR for consumer contact in specific situations. Every email we send includes a clear unsubscribe option and the sender identification required by law. We provide a full GDPR audit trail in your dashboard.",
       },
       {
         q: "What about deliverability and spam?",
