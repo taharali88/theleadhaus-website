@@ -68,18 +68,38 @@ const services = [
 ];
 
 const comparisonRows = [
-  { feature: "Provides fresh leads",                  lh: "Yes", mc: "No",      ml: "No",   br: "No",      eo: "No" },
-  { feature: "Sends the outreach for you",             lh: "Yes", mc: "No",      ml: "No",   br: "No",      eo: "No" },
-  { feature: "Plain English reporting",                lh: "Yes", mc: "No",      ml: "No",   br: "No",      eo: "No" },
-  { feature: "Charges per contact",                   lh: "No",  mc: "Yes",     ml: "Yes",  br: "Partial", eo: "Yes" },
-  { feature: "Hidden fees for unsubscribed contacts", lh: "No",  mc: "Yes",     ml: "No",   br: "No",      eo: "No" },
-  { feature: "Bring your own list required",          lh: "No",  mc: "Yes",     ml: "Yes",  br: "Yes",     eo: "Yes" },
+  { feature: "Provides fresh leads",                  lh: "Yes", mc: "No",      ml: "No",   br: "No",      eo: "No",  negative: false },
+  { feature: "Sends the outreach for you",             lh: "Yes", mc: "No",      ml: "No",   br: "No",      eo: "No",  negative: false },
+  { feature: "Plain English reporting",                lh: "Yes", mc: "No",      ml: "No",   br: "No",      eo: "No",  negative: false },
+  { feature: "Charges per contact",                   lh: "No",  mc: "Yes",     ml: "Yes",  br: "Partial", eo: "Yes", negative: true  },
+  { feature: "Hidden fees for unsubscribed contacts", lh: "No",  mc: "Yes",     ml: "No",   br: "No",      eo: "No",  negative: true  },
+  { feature: "Bring your own list required",          lh: "No",  mc: "Yes",     ml: "Yes",  br: "Yes",     eo: "Yes", negative: true  },
 ];
 
-const checkTick = (val: string) => {
-  if (val === "Yes") return <span style={{ color: "var(--color-accent)" }}>✓</span>;
-  if (val === "No")  return <span style={{ color: "var(--color-border)" }}>—</span>;
-  return <span style={{ color: "var(--color-muted)", fontSize: 12 }}>{val}</span>;
+// Dark green matches the warm cream palette without clashing with the rust accent
+const GREEN = "oklch(35% 0.10 155)";
+const RED   = "oklch(50% 0.18 22)";
+
+const checkCell = (val: string, isLeadHaus: boolean, negative: boolean) => {
+  if (isLeadHaus) {
+    // LeadHaus is always the winner — green tick regardless of Yes/No
+    return <span style={{ color: GREEN, fontSize: 17, fontWeight: 700 }}>✓</span>;
+  }
+
+  if (val === "Partial") {
+    return <span style={{ color: "var(--color-muted)", fontSize: 12 }}>Partial</span>;
+  }
+
+  const isBad = negative ? val === "Yes" : val === "No";
+
+  if (isBad) {
+    return (
+      <span style={{ color: RED, fontSize: 15, fontWeight: 700, lineHeight: 1 }}>✕</span>
+    );
+  }
+
+  // Competitor has the positive value (e.g. they do provide this feature)
+  return <span style={{ color: GREEN, fontSize: 17 }}>✓</span>;
 };
 
 export default function HomePage() {
@@ -343,11 +363,11 @@ export default function HomePage() {
                   {comparisonRows.map((row, i) => (
                     <tr key={i} className="compare-row" style={{ borderBottom: "1px solid var(--color-border)" }}>
                       <td style={{ padding: "14px 24px", fontWeight: 500, color: "var(--color-foreground)" }}>{row.feature}</td>
-                      <td style={{ padding: "14px 24px", textAlign: "center", background: "oklch(59% 0.130 34 / 0.05)", fontWeight: 700 }}>{checkTick(row.lh)}</td>
-                      <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkTick(row.mc)}</td>
-                      <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkTick(row.ml)}</td>
-                      <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkTick(row.br)}</td>
-                      <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkTick(row.eo)}</td>
+                      <td style={{ padding: "14px 24px", textAlign: "center", background: "oklch(59% 0.130 34 / 0.05)", fontWeight: 700 }}>{checkCell(row.lh, true,  row.negative)}</td>
+                      <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkCell(row.mc, false, row.negative)}</td>
+                      <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkCell(row.ml, false, row.negative)}</td>
+                      <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkCell(row.br, false, row.negative)}</td>
+                      <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkCell(row.eo, false, row.negative)}</td>
                     </tr>
                   ))}
                   <tr style={{ background: "var(--color-background)", fontWeight: 600 }}>
