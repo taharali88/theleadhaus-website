@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeadHaus — Quality Leads. Real Growth.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ── Tokens ── */
+    :root {
+      --bg:       oklch(96.5% 0.020 76);
+      --surface:  oklch(99%   0.008 76);
+      --fg:       oklch(17%   0.024 58);
+      --muted:    oklch(47%   0.020 58);
+      --border:   oklch(88%   0.018 76);
+      --accent:   oklch(59%   0.130 34);
+      --accent-bg: oklch(59%  0.130 34 / 0.10);
+
+      --display: 'Playfair Display', 'Iowan Old Style', Georgia, serif;
+      --body:    'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+      --max: 1200px;
+      --sec: 96px;
+      --r:   12px;
+      --rsm: 8px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Utilities ── */
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 32px; }
+    @media (max-width: 640px) { .wrap { padding: 0 20px; } }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: oklch(96.5% 0.020 76 / 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-row {
+      max-width: var(--max); margin: 0 auto; padding: 0 32px;
+      height: 68px; display: flex; align-items: center;
+      justify-content: space-between; gap: 20px;
+    }
+    .logo {
+      font-family: var(--display); font-size: 21px; font-weight: 700;
+      letter-spacing: -0.02em; color: var(--fg); text-decoration: none;
+      flex-shrink: 0;
+    }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      font-size: 14px; font-weight: 500; color: var(--muted);
+      text-decoration: none; transition: color 0.18s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--fg); }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 20px; border-radius: var(--rsm);
+      font: 600 14px/1 var(--body); cursor: pointer;
+      text-decoration: none; transition: all 0.18s;
+      border: none; white-space: nowrap;
+    }
+    .btn-dark   { background: var(--fg); color: var(--bg); }
+    .btn-dark:hover { background: oklch(27% 0.024 58); }
+    .btn-outline { background: transparent; color: var(--fg); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--muted); background: var(--accent-bg); }
+    .btn-warm   { background: var(--accent); color: #fff; }
+    .btn-warm:hover { background: oklch(53% 0.130 34); }
+    .btn-lg     { padding: 13px 28px; font-size: 15px; border-radius: var(--rsm); }
+
+    /* ── Eyebrow ── */
+    .ew {
+      font: 600 11px/1 var(--body); letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
+    }
+
+    /* ── Section header ── */
+    .sh { margin-bottom: 56px; }
+    .sh h2 {
+      font-family: var(--display); font-size: clamp(28px, 3vw, 44px);
+      font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; color: var(--fg);
+    }
+    .sh p {
+      margin-top: 14px; font-size: 17px; color: var(--muted);
+      max-width: 520px; line-height: 1.65;
+    }
+
+    /* ── Hero ── */
+    .hero { padding: 80px 0 96px; }
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .hero-ew { margin-bottom: 20px; }
+    .hero h1 {
+      font-family: var(--display);
+      font-size: clamp(48px, 6vw, 80px);
+      font-weight: 900; line-height: 1.04; letter-spacing: -0.025em;
+      color: var(--fg); margin-bottom: 24px;
+    }
+    .hero-sub {
+      font-size: 18px; line-height: 1.65; color: var(--muted);
+      max-width: 460px; margin-bottom: 40px;
+    }
+    .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* Arch image frame */
+    .arch-wrap { display: flex; justify-content: flex-end; }
+    .arch {
+      width: 100%; max-width: 460px;
+      aspect-ratio: 3/4;
+      border-radius: 260px 260px 32px 32px;
+      background: oklch(76% 0.062 55);
+      position: relative; overflow: hidden;
+    }
+    .arch-inner {
+      position: absolute; inset: 0;
+      display: flex; align-items: flex-end; justify-content: center;
+    }
+    .arch-inner svg { width: 65%; margin-bottom: -8px; }
+
+    @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; gap: 48px; } .arch-wrap { display: none; } }
+
+    /* ── Logos ── */
+    .logos { padding: 48px 0 64px; border-top: 1px solid var(--border); }
+    .logos-label {
+      text-align: center; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 28px;
+    }
+    .logos-row {
+      display: flex; justify-content: center; align-items: center;
+      gap: 48px; flex-wrap: wrap;
+    }
+    .logo-mark {
+      font-family: var(--display); font-size: 15px; font-weight: 700;
+      color: var(--border); letter-spacing: -0.01em;
+      transition: color 0.2s;
+    }
+    .logo-mark:hover { color: var(--muted); }
+
+    /* ── Stats ── */
+    .stats { padding: var(--sec) 0; }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      background: var(--border); gap: 1px;
+      border: 1px solid var(--border); border-radius: var(--r); overflow: hidden;
+    }
+    .stat {
+      background: var(--surface); padding: 52px 40px; text-align: center;
+    }
+    .stat-n {
+      font-family: var(--display); font-size: clamp(52px, 5.5vw, 76px);
+      font-weight: 700; letter-spacing: -0.04em; line-height: 1;
+      color: var(--fg); margin-bottom: 8px;
+    }
+    .stat-l { font-size: 14px; color: var(--muted); font-weight: 500; }
+    @media (max-width: 640px) { .stats-grid { grid-template-columns: 1fr; } .stat { padding: 36px 28px; } }
+
+    /* ── How it works ── */
+    .hiw { padding: var(--sec) 0; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 52px; }
+    .step-n {
+      font-family: var(--display); font-size: 56px; font-weight: 900;
+      color: var(--border); line-height: 1; margin-bottom: 16px;
+      letter-spacing: -0.04em;
+    }
+    .step h3 {
+      font-family: var(--display); font-size: 22px; font-weight: 700;
+      color: var(--fg); margin-bottom: 10px; letter-spacing: -0.01em;
+    }
+    .step p { font-size: 15px; color: var(--muted); line-height: 1.7; }
+    @media (max-width: 768px) { .steps { grid-template-columns: 1fr; gap: 40px; } }
+
+    /* ── Services ── */
+    .services { padding: var(--sec) 0; background: var(--surface); }
+    .svc-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      background: var(--border); gap: 1px;
+      border: 1px solid var(--border); border-radius: var(--r); overflow: hidden;
+    }
+    .svc {
+      background: var(--surface); padding: 40px 36px;
+      transition: background 0.2s;
+    }
+    .svc:hover { background: var(--bg); }
+    .svc-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+    }
+    .svc h3 {
+      font-family: var(--display); font-size: 19px; font-weight: 700;
+      color: var(--fg); margin-bottom: 10px; letter-spacing: -0.01em;
+    }
+    .svc p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+    @media (max-width: 900px) { .svc-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .svc-grid { grid-template-columns: 1fr; } }
+
+    /* ── Testimonial ── */
+    .testimonial { padding: var(--sec) 0; }
+    .testi-grid {
+      display: grid; grid-template-columns: 220px 1fr;
+      gap: 80px; align-items: start;
+    }
+    .testi-avatar {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: var(--accent-bg); border: 2px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--display); font-size: 18px; font-weight: 700;
+      color: var(--accent); margin-bottom: 16px;
+    }
+    .testi-name { font-size: 15px; font-weight: 600; color: var(--fg); margin-bottom: 4px; }
+    .testi-role { font-size: 13px; color: var(--muted); }
+    .testi-quote {
+      font-family: var(--display); font-size: clamp(22px, 2.5vw, 32px);
+      font-weight: 700; line-height: 1.4; color: var(--fg);
+      letter-spacing: -0.01em;
+      border-left: 3px solid var(--accent); padding-left: 32px;
+    }
+    @media (max-width: 768px) { .testi-grid { grid-template-columns: 1fr; gap: 36px; } }
+
+    /* ── CTA dark ── */
+    .cta-dark { padding: var(--sec) 0; background: var(--fg); }
+    .cta-dark-grid {
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 48px; align-items: center;
+    }
+    .cta-dark h2 {
+      font-family: var(--display); font-size: clamp(30px, 3.5vw, 50px);
+      font-weight: 700; letter-spacing: -0.02em; line-height: 1.15;
+      color: var(--bg);
+    }
+    .cta-dark p { margin-top: 12px; font-size: 16px; color: oklch(70% 0.018 75); max-width: 420px; }
+    .cta-form { display: flex; flex-direction: column; gap: 10px; min-width: 272px; }
+    .cta-input {
+      padding: 12px 16px; border: 1px solid oklch(35% 0.020 58);
+      border-radius: var(--rsm); background: oklch(24% 0.020 58);
+      color: var(--bg); font: 400 14px/1 var(--body);
+      outline: none; transition: border-color 0.18s;
+    }
+    .cta-input::placeholder { color: oklch(52% 0.015 58); }
+    .cta-input:focus { border-color: var(--accent); }
+    @media (max-width: 768px) { .cta-dark-grid { grid-template-columns: 1fr; } }
+
+    /* ── Footer ── */
+    footer { background: var(--fg); padding: 0 0 32px; border-top: 1px solid oklch(30% 0.024 58); }
+    .foot-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+      padding: 56px 0 48px;
+      border-bottom: 1px solid oklch(30% 0.024 58); margin-bottom: 24px;
+    }
+    .foot-brand .logo { color: var(--bg); display: block; margin-bottom: 12px; }
+    .foot-brand p { font-size: 13px; color: oklch(55% 0.018 58); max-width: 230px; line-height: 1.65; }
+    .foot-col h5 { font: 600 11px/1 var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: oklch(42% 0.012 58); margin-bottom: 14px; }
+    .foot-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .foot-col a { font-size: 14px; color: oklch(68% 0.018 75); text-decoration: none; transition: color 0.18s; }
+    .foot-col a:hover { color: var(--bg); }
+    .foot-bottom { display: flex; justify-content: space-between; font-size: 12px; color: oklch(40% 0.012 58); }
+    @media (max-width: 900px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px) { .foot-grid { grid-template-columns: 1fr; } .foot-bottom { flex-direction: column; gap: 6px; } }
+    @media (max-width: 768px) { .nav-links, .nav-cta { display: none; } }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-row">
+    <a href="index.html" class="logo">LeadHaus</a>
+    <ul class="nav-links">
+      <li><a href="how-it-works.html">How It Works</a></li>
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a href="contact.html" class="btn btn-dark nav-cta">Get Started</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="ew hero-ew">Premium B2B Lead Generation</p>
+        <h1>Quality Leads.<br>Real Growth.</h1>
+        <p class="hero-sub">We help established B2B companies build consistent, high-quality pipelines — so your sales team can focus on closing, not chasing.</p>
+        <div class="hero-ctas">
+          <a href="contact.html" class="btn btn-dark btn-lg">Book a discovery call</a>
+          <a href="how-it-works.html" class="btn btn-outline btn-lg">See how it works</a>
+        </div>
+      </div>
+      <div class="arch-wrap">
+        <div class="arch">
+          <div class="arch-inner">
+            <!-- Minimal SVG plant (olive branch feel) -->
+            <svg viewBox="0 0 240 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Main stem -->
+              <path d="M120 358 C118 300 112 240 100 170 C92 120 85 80 75 40" stroke="oklch(32% 0.055 55)" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- Branch left 1 -->
+              <path d="M102 175 C80 155 55 138 30 125" stroke="oklch(32% 0.055 55)" stroke-width="1.8" stroke-linecap="round"/>
+              <!-- Leaf on left branch 1 -->
+              <ellipse cx="50" cy="140" rx="28" ry="14" fill="oklch(46% 0.085 95)" opacity="0.85" transform="rotate(-25 50 140)"/>
+              <ellipse cx="70" cy="128" rx="22" ry="11" fill="oklch(52% 0.090 95)" opacity="0.8" transform="rotate(-20 70 128)"/>
+              <!-- Branch right 1 -->
+              <path d="M108 220 C132 200 158 188 182 178" stroke="oklch(32% 0.055 55)" stroke-width="1.8" stroke-linecap="round"/>
+              <!-- Leaf on right branch 1 -->
+              <ellipse cx="162" cy="186" rx="28" ry="12" fill="oklch(48% 0.088 92)" opacity="0.8" transform="rotate(20 162 186)"/>
+              <ellipse cx="182" cy="178" rx="20" ry="10" fill="oklch(54% 0.092 92)" opacity="0.75" transform="rotate(15 182 178)"/>
+              <!-- Branch left 2 -->
+              <path d="M95 255 C72 240 48 228 24 220" stroke="oklch(32% 0.055 55)" stroke-width="1.6" stroke-linecap="round"/>
+              <ellipse cx="44" cy="228" rx="26" ry="11" fill="oklch(44% 0.082 95)" opacity="0.75" transform="rotate(-30 44 228)"/>
+              <!-- Top spray -->
+              <path d="M90 120 C72 100 58 75 48 48" stroke="oklch(32% 0.055 55)" stroke-width="1.4" stroke-linecap="round"/>
+              <ellipse cx="55" cy="68" rx="18" ry="9" fill="oklch(50% 0.086 95)" opacity="0.7" transform="rotate(-35 55 68)"/>
+              <ellipse cx="72" cy="88" rx="15" ry="8" fill="oklch(48% 0.084 95)" opacity="0.75" transform="rotate(-28 72 88)"/>
+              <!-- Pot -->
+              <path d="M88 358 C84 340 76 328 76 320 L164 320 C164 328 156 340 152 358 Z" fill="oklch(68% 0.090 44)"/>
+              <path d="M72 320 L168 320 L162 312 L78 312 Z" fill="oklch(74% 0.095 46)"/>
+              <ellipse cx="120" cy="312" rx="44" ry="6" fill="oklch(78% 0.085 48)"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── LOGOS ── -->
+<section class="logos">
+  <div class="wrap">
+    <p class="logos-label">Trusted by growth teams at</p>
+    <div class="logos-row">
+      <span class="logo-mark">Salesforce</span>
+      <span class="logo-mark">Meta Ads</span>
+      <span class="logo-mark">HubSpot</span>
+      <span class="logo-mark">LinkedIn Sales</span>
+      <span class="logo-mark">Outreach</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS ── -->
+<section class="stats">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="stat-n">250+</div>
+        <div class="stat-l">Clients across 14 industries</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">2M+</div>
+        <div class="stat-l">Qualified leads delivered</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">35%</div>
+        <div class="stat-l">Average pipeline lift in 90 days</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section class="hiw">
+  <div class="wrap">
+    <div class="sh">
+      <p class="ew">The System</p>
+      <h2>A proven system for predictable growth.</h2>
+      <p>We replace guesswork with a repeatable, data-driven process — from ICP mapping to qualified introductions delivered to your calendar.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">01</div>
+        <h3>Target</h3>
+        <p>We define your ideal customer profile with surgical precision — industry, headcount, revenue, buying signals, and trigger events that indicate readiness.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">02</div>
+        <h3>Engage</h3>
+        <p>Our team runs multi-channel outreach across email, LinkedIn, and phone — using sequencing logic refined across 250+ live campaigns.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">03</div>
+        <h3>Deliver</h3>
+        <p>Warm, qualified introductions land in your calendar. Decision-makers who've expressed interest, verified in role, ready for a real conversation.</p>
+      </div>
+    </div>
+    <div style="margin-top: 48px;">
+      <a href="how-it-works.html" class="btn btn-outline">Full process breakdown →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="sh">
+      <p class="ew">Services</p>
+      <h2>Lead generation services that deliver.</h2>
+    </div>
+    <div class="svc-grid">
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--accent)" stroke-width="1.4">
+            <circle cx="9" cy="9" r="6.5"/>
+            <path d="M9 5.5v3.5l2 2"/>
+          </svg>
+        </div>
+        <h3>Outbound Lead Generation</h3>
+        <p>Targeted, personalised outreach sequences to your ideal customers across email, LinkedIn, and phone — managed entirely by our team.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--accent)" stroke-width="1.4">
+            <circle cx="7" cy="7" r="4.5"/>
+            <path d="M15 15l-3.5-3.5"/>
+          </svg>
+        </div>
+        <h3>ICP & Market Mapping</h3>
+        <p>Deep research into your addressable market — identifying the right contacts, companies, and timing signals before a single message is sent.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--accent)" stroke-width="1.4">
+            <path d="M3 5h12M3 9h8M3 13h10"/>
+          </svg>
+        </div>
+        <h3>Messaging & Copy</h3>
+        <p>Bespoke positioning and copy for every channel. We write to your buyer's priorities — never generic templates.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--accent)" stroke-width="1.4">
+            <path d="M3 13.5l4-4 3 3 5-6"/>
+          </svg>
+        </div>
+        <h3>Pipeline Reporting</h3>
+        <p>Real-time dashboards showing opens, replies, meetings booked, and pipeline value — full transparency on what's working.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--accent)" stroke-width="1.4">
+            <circle cx="6.5" cy="6.5" r="3"/>
+            <path d="M12 15a4 4 0 0 0-7.8 0"/>
+            <path d="M14.5 9.5a2.5 2.5 0 1 0 0-5"/>
+          </svg>
+        </div>
+        <h3>SDR as a Service</h3>
+        <p>A fully embedded, dedicated SDR function without the overhead of hiring. Ramp in weeks, not months, with zero onboarding risk.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--accent)" stroke-width="1.4">
+            <rect x="2" y="4" width="14" height="11" rx="1.5"/>
+            <path d="M5 4V3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v1"/>
+          </svg>
+        </div>
+        <h3>CRM Integration</h3>
+        <p>Seamless sync with Salesforce, HubSpot, Pipedrive, and others — every lead logged, scored, and routed automatically.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIAL ── -->
+<section class="testimonial">
+  <div class="wrap">
+    <div class="testi-grid">
+      <div>
+        <div class="testi-avatar">MR</div>
+        <div class="testi-name">Marcus Reid</div>
+        <div class="testi-role">VP Sales, Meridian Capital</div>
+      </div>
+      <blockquote class="testi-quote">
+        "LeadHaus gave us 47 qualified meetings in the first 60 days. Our previous agency took six months to get half that. The quality of contact — title, timing, context — was in another league entirely."
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA DARK ── -->
+<section class="cta-dark">
+  <div class="wrap">
+    <div class="cta-dark-grid">
+      <div>
+        <h2>Let's build your pipeline.</h2>
+        <p>Book a 30-minute discovery call and leave with a clear view of where your next 50 meetings are coming from.</p>
+      </div>
+      <div class="cta-form">
+        <input type="email" class="cta-input" placeholder="Work email address">
+        <a href="contact.html" class="btn btn-warm">Book discovery call</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="index.html" class="logo">LeadHaus</a>
+        <p>Premium lead generation for established B2B companies ready to scale their pipeline without scaling their headcount.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="contact.html">About</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Product</h5>
+        <ul>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="contact.html">Case Studies</a></li>
+          <li><a href="contact.html">Integrations</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Get in Touch</h5>
+        <ul>
+          <li><a href="contact.html">Book a Call</a></li>
+          <li><a href="mailto:hello@leadhaus.com">hello@leadhaus.com</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2025 LeadHaus. All rights reserved.</span>
+      <span>Privacy Policy · Terms of Service</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

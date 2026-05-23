@@ -1,296 +1,503 @@
+"use client";
+
 import Link from "next/link";
-import type { Metadata } from "next";
-import { FadeInSection } from "@/components/FadeInSection";
+import { useState } from "react";
 
-export const metadata: Metadata = {
-  title: "Pricing | Leadhaus",
-  description:
-    "One fixed price every month. No surprises. Three plans that include lead generation, full outreach delivery, weekly reporting, and the live dashboard.",
-  alternates: {
-    canonical: "https://theleadhaus.io/pricing",
-  },
-};
-
-const tiers = [
+// Metadata can't be used in client components, so it's set in a parent
+const plans = [
   {
     name: "Starter",
-    price: "£497",
-    period: "per month",
-    upfront: "£2,386 for six months upfront",
-    upfrontSaving: "saves £596",
-    audience:
-      "Local service businesses, solo operators, and companies with a single service offering.",
+    monthly: "2,400",
+    annual: "2,040",
+    period: "per month + performance",
+    desc: "For companies who want to test outbound before committing to scale. A fully managed pilot that delivers real meetings — not promises.",
     features: [
-      "Up to two outreach channels (email plus one intent monitor)",
-      "Onboarding questionnaire and database build",
-      "Fresh leads generated weekly, exclusive to your business",
-      "Full outreach sent from our managed warm domains",
-      "Weekly Monday morning summary in plain English",
-      "Live dashboard access",
-      "Bounce binning and database cleaning",
-      "Email support, response within two working days",
+      { text: "ICP definition & list build (up to 500 contacts/mo)", included: true },
+      { text: "Email + LinkedIn outreach sequences", included: true },
+      { text: "Dedicated account manager", included: true },
+      { text: "Monthly reporting call", included: true },
+      { text: "CRM integration (HubSpot or Salesforce)", included: true },
+      { text: "Qualified meeting briefing notes", included: true },
+      { text: "Phone outreach", included: false },
+      { text: "A/B copy testing", included: false },
+      { text: "Live pipeline dashboard", included: false },
     ],
-    badge: null,
-    accent: false,
+    cta: "Book a call",
+    ctaClass: "btn btn-outline btn-full",
+    featured: false,
   },
   {
     name: "Growth",
-    price: "£997",
-    period: "per month",
-    upfront: "£4,786 for six months upfront",
-    upfrontSaving: "saves £1,196",
-    audience:
-      "Established small businesses, multi service operations, and scaling consultancies.",
+    monthly: "4,800",
+    annual: "4,080",
+    period: "per month + performance",
+    desc: "For established teams ready to build a consistent, scalable pipeline. Full multi-channel execution with weekly reporting and live data.",
     features: [
-      "Everything in Starter, plus:",
-      "Up to four outreach channels (business to business email, intent monitoring, social engagement, and Land Registry or Companies House triggers)",
-      "Custom audience segmentation by job title, industry, geography, or life event",
-      "Monthly thirty minute strategy call",
-      "Priority support, response within one working day",
-      "Behavioural sequence optimization",
+      { text: "ICP definition & list build (up to 1,500 contacts/mo)", included: true },
+      { text: "Email + LinkedIn + phone sequences", included: true },
+      { text: "Senior account manager (≥5 years experience)", included: true },
+      { text: "Weekly strategy call", included: true },
+      { text: "CRM integration (all major platforms)", included: true },
+      { text: "Qualified meeting briefing notes", included: true },
+      { text: "A/B copy testing — unlimited variants", included: true },
+      { text: "Live pipeline dashboard", included: true },
+      { text: "Reply handling & objection management", included: true },
     ],
-    badge: "Most popular",
-    accent: true,
+    cta: "Book a call",
+    ctaClass: "btn btn-warm btn-full btn-lg",
+    featured: true,
+    badge: "Most Popular",
   },
   {
-    name: "Scale",
-    price: "£1,997",
-    period: "per month",
-    upfront: "£9,586 for six months upfront",
-    upfrontSaving: "saves £2,396",
-    audience:
-      "Agencies serving their own clients, businesses with multiple service lines, and operations requiring custom integrations.",
+    name: "Enterprise",
+    monthly: null,
+    annual: null,
+    period: "custom scope + SLA",
+    desc: "For companies that need dedicated team capacity, multi-territory outreach, or deep integration with existing revenue operations.",
     features: [
-      "Everything in Growth, plus:",
-      "All outreach channels",
-      "Dedicated onboarding call with the founder",
-      "Weekly strategy call",
-      "Custom API integration with your existing CRM or systems",
-      "Same day support",
-      "Bespoke campaign design",
+      { text: "Unlimited contacts & territory scope", included: true },
+      { text: "Dedicated pod (SDR + strategist + data analyst)", included: true },
+      { text: "All Growth features, plus:", included: true },
+      { text: "Multi-territory & multilingual campaigns", included: true },
+      { text: "RevOps consulting & CRM build-out", included: true },
+      { text: "Executive-level stakeholder reporting", included: true },
+      { text: "Guaranteed meeting SLA", included: true },
+      { text: "Quarterly pipeline review with your board", included: true },
+      { text: "White-labelling available", included: true },
     ],
-    badge: null,
-    accent: false,
+    cta: "Talk to sales",
+    ctaClass: "btn btn-dark btn-full",
+    featured: false,
   },
 ];
 
-const alternativeCosts = [
-  { item: "B2B Database access (Apollo or ZoomInfo)", cost: "£80/mo", note: "Seat license and export limits" },
-  { item: "Secondary domains (5 accounts)", cost: "£20/mo", note: "Domain registration and inbox fees" },
-  { item: "Email warming and validation tools", cost: "£50/mo", note: "Ensuring messages do not hit spam" },
-  { item: "Professional copywriting and templates", cost: "£500", note: "One time setup fee" },
-  { item: "Your personal administrative labor", cost: "15 hours/wk", note: "Time spent managing databases and settings" },
+const compareRows = [
+  { section: "Outreach channels" },
+  { feature: "Email sequences",        starter: true,  growth: true,  enterprise: true },
+  { feature: "LinkedIn outreach",      starter: true,  growth: true,  enterprise: true },
+  { feature: "Phone / cold calling",   starter: false, growth: true,  enterprise: true },
+  { feature: "Multilingual campaigns", starter: false, growth: false, enterprise: true },
+  { section: "Data & targeting" },
+  { feature: "Contacts built per month", starter: "Up to 500", growth: "Up to 1,500", enterprise: "Unlimited" },
+  { feature: "ICP mapping session",    starter: true,  growth: true,  enterprise: true },
+  { feature: "Trigger-event targeting",starter: false, growth: true,  enterprise: true },
+  { feature: "GDPR-compliant verification", starter: true, growth: true, enterprise: true },
+  { section: "Reporting" },
+  { feature: "Monthly reporting call", starter: true,  growth: true,  enterprise: true },
+  { feature: "Weekly strategy call",   starter: false, growth: true,  enterprise: true },
+  { feature: "Live pipeline dashboard",starter: false, growth: true,  enterprise: true },
+  { feature: "Executive board reporting", starter: false, growth: false, enterprise: true },
+  { section: "Team & support" },
+  { feature: "Account manager",        starter: "Dedicated", growth: "Senior (5+ yrs)", enterprise: "Dedicated pod" },
+  { feature: "A/B copy testing",       starter: false, growth: "Unlimited", enterprise: "Unlimited" },
+  { feature: "Reply handling",         starter: false, growth: true,  enterprise: true },
+  { feature: "Guaranteed meeting SLA", starter: false, growth: false, enterprise: true },
 ];
 
+const faqs = [
+  {
+    q: "How does the performance component work?",
+    a: "On top of the monthly retainer, we charge a small fee per qualified meeting delivered — typically £150–£300 depending on deal size and industry. This means our incentives are directly tied to yours. We don't earn more by sending more emails; we earn more by filling your calendar with the right conversations.",
+  },
+  {
+    q: 'What counts as a "qualified" meeting?',
+    a: "We agree a qualification criteria with you during onboarding — typically seniority, company size, budget authority, and timeline. A meeting only counts if the prospect meets all agreed criteria and the meeting actually occurs. No-shows and declined meetings don't count toward your performance fees.",
+  },
+  {
+    q: "How long until I see my first meetings?",
+    a: "Most clients see their first qualified meetings in weeks two or three. Week one is onboarding, ICP mapping, and list build. Sequences go live in week two. Results vary by industry, deal size, and how tight your ICP is — but we typically aim to cover your retainer cost in qualified pipeline value within the first 30 days.",
+  },
+  {
+    q: "Is there a minimum contract length?",
+    a: "Starter is available month-to-month with 30 days' notice. Growth requires a 3-month minimum — it takes that long to properly tune messaging and ICP. Enterprise terms are negotiated as part of the engagement. We've never had a client leave because results weren't there; most upgrade instead.",
+  },
+  {
+    q: "Can you work with our existing CRM and tech stack?",
+    a: "Yes. We integrate with Salesforce, HubSpot, Pipedrive, Outreach, Salesloft, and most other major CRMs and sequencing tools via native integrations or Zapier. Every lead is automatically logged with full activity context — you'll never be chasing data from us. Growth and Enterprise tiers include integration setup at no extra cost.",
+  },
+  {
+    q: "Do I own the contacts and data you build?",
+    a: "Completely. Every contact list, every message thread, every campaign asset is yours from day one. When an engagement ends, we export everything and hand it over in full. We document our process so your internal team — or any future agency — can pick it up and keep running it. We build systems, not dependencies.",
+  },
+];
+
+function CellVal({ val }: { val: boolean | string | undefined }) {
+  if (val === true)  return <span style={{ color: "var(--color-accent)", fontSize: 17 }}>✓</span>;
+  if (val === false) return <span style={{ color: "var(--color-border)", fontSize: 18 }}>—</span>;
+  return <span style={{ color: "var(--color-muted)", fontSize: 13 }}>{val}</span>;
+}
+
 export default function PricingPage() {
+  const [annual, setAnnual] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
   return (
-    <div className="bg-background text-body min-h-screen">
-      {/* Hero */}
-      <section className="py-20 md:py-32 border-b border-border bg-background">
-        <div className="mx-auto max-w-[1200px] px-6 lg:px-8 text-center flex flex-col items-center space-y-6">
-          <h1 className="text-foreground tracking-tight leading-[1.1] font-bold">
-            One fixed price every month. <span className="italic text-accent">No surprises.</span>
+    <div>
+
+      {/* ══ PAGE HERO ══ */}
+      <section style={{ padding: "80px 0 64px", textAlign: "center" }}>
+        <div className="wrap">
+          <p className="eyebrow" style={{ textAlign: "center" }}>Pricing</p>
+          <h1 style={{ marginBottom: 20 }}>
+            Transparent pricing.<br />Real results.
           </h1>
-          <p className="text-lg text-body leading-relaxed max-w-2xl">
-            Select a plan based on the level of service you need, not on contact volume. Every plan includes targeted lead generation, full outreach delivery, weekly reporting, and live dashboard access.
+          <p style={{ fontSize: 18, lineHeight: 1.65, color: "var(--color-muted)", maxWidth: 480, margin: "0 auto 40px" }}>
+            No retainer traps. No hidden minimums. Three tiers built for where you are now — upgrade as your pipeline scales.
           </p>
-          <div className="inline-flex items-center border border-accent/30 bg-accent/5 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-accent">
-            Pay for six months upfront and save 20 percent
+
+          {/* Billing toggle */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 56 }}>
+            <span style={{ fontSize: 14, fontWeight: 500, color: annual ? "var(--color-muted)" : "var(--color-foreground)" }}>
+              Monthly
+            </span>
+            <label style={{ position: "relative", display: "inline-block", width: 44, height: 24, cursor: "pointer" }}>
+              <input
+                type="checkbox"
+                checked={annual}
+                onChange={() => setAnnual(!annual)}
+                style={{ opacity: 0, width: 0, height: 0 }}
+              />
+              <span style={{
+                position: "absolute",
+                inset: 0,
+                background: annual ? "var(--color-accent)" : "var(--color-border)",
+                borderRadius: 24,
+                transition: "background 0.2s",
+              }}>
+                <span style={{
+                  position: "absolute",
+                  width: 18,
+                  height: 18,
+                  left: annual ? 23 : 3,
+                  top: 3,
+                  background: "white",
+                  borderRadius: "50%",
+                  transition: "left 0.2s",
+                }} />
+              </span>
+            </label>
+            <span style={{ fontSize: 14, fontWeight: 500, color: annual ? "var(--color-foreground)" : "var(--color-muted)" }}>
+              Annual{" "}
+              <span style={{
+                fontSize: 11,
+                fontWeight: 600,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                background: "var(--color-accent-bg)",
+                color: "var(--color-accent)",
+                borderRadius: 4,
+                padding: "3px 8px",
+                marginLeft: 6,
+              }}>
+                Save 15%
+              </span>
+            </span>
           </div>
         </div>
       </section>
 
-      {/* Pricing tiers */}
-      <section className="py-16 md:py-24 bg-background border-b border-border">
-        <div className="mx-auto max-w-[1200px] px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-            {tiers.map((tier, i) => (
-              <FadeInSection key={tier.name} delay={i * 100} className="h-full">
-                <div
-                  className={`border p-8 h-full flex flex-col justify-between relative ${
-                    tier.accent
-                      ? "border-2 border-accent bg-background shadow-sm"
-                      : "border-border bg-surface"
-                  }`}
-                >
-                  {tier.badge && (
-                    <div className="absolute -top-3.5 left-6 bg-accent px-3 py-1 border border-accent">
-                      <span className="text-xs font-bold uppercase tracking-wider text-white">
-                        {tier.badge}
-                      </span>
-                    </div>
-                  )}
-
-                  <div>
-                    <h2 className="text-xl font-bold text-foreground">
-                      {tier.name}
-                    </h2>
-
-                    <div className="mt-4 flex items-baseline gap-1">
-                      <span className="text-4xl font-extrabold text-foreground tracking-tight">
-                        {tier.price}
-                      </span>
-                      <span className="text-xs font-semibold text-body uppercase tracking-wider">
-                        / {tier.period}
-                      </span>
-                    </div>
-
-                    <p className="mt-2 text-xs text-body font-medium">
-                      Or {tier.upfront}{" "}
-                      <span className="text-accent font-semibold">
-                        ({tier.upfrontSaving})
-                      </span>
-                    </p>
-
-                    <p className="mt-6 text-sm text-body leading-relaxed min-h-[60px]">
-                      {tier.audience}
-                    </p>
-
-                    <div className="mt-8 pt-8 border-t border-border">
-                      <ul className="space-y-4">
-                        {tier.features.map((feature) => (
-                          <li
-                            key={feature}
-                            className="flex items-start gap-3 text-xs text-body"
-                          >
-                            {feature.endsWith(":") ? (
-                              <span className="font-semibold text-foreground uppercase tracking-wider block mt-1">
-                                {feature}
-                              </span>
-                            ) : (
-                              <>
-                                <svg
-                                  className="w-4 h-4 text-accent flex-shrink-0 mt-0.5"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  strokeWidth={2}
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M4.5 12.75l6 6 9-13.5"
-                                  />
-                                </svg>
-                                <span className="leading-relaxed">{feature}</span>
-                              </>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+      {/* ══ PRICING CARDS ══ */}
+      <section style={{ paddingBottom: 96 }}>
+        <div className="wrap">
+          <div className="pricing-grid">
+            {plans.map((plan) => (
+              <div
+                key={plan.name}
+                style={{
+                  background: plan.featured ? "var(--color-foreground)" : "var(--color-surface)",
+                  border: `1px solid ${plan.featured ? "var(--color-foreground)" : "var(--color-border)"}`,
+                  borderRadius: 12,
+                  padding: "40px 36px",
+                  display: "flex",
+                  flexDirection: "column",
+                  position: "relative",
+                  transition: "box-shadow 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  if (!plan.featured) (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 24px oklch(17% 0.024 58 / 0.08)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
+                }}
+              >
+                {plan.badge && (
+                  <div style={{
+                    position: "absolute",
+                    top: -12,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    background: "var(--color-accent)",
+                    color: "#fff",
+                    fontSize: 11,
+                    fontWeight: 600,
+                    letterSpacing: "0.10em",
+                    textTransform: "uppercase",
+                    padding: "5px 14px",
+                    borderRadius: 20,
+                    whiteSpace: "nowrap",
+                  }}>
+                    {plan.badge}
                   </div>
+                )}
 
-                  <div className="mt-8 pt-4">
-                    <Link
-                      href="/contact"
-                      className={`block w-full text-center px-6 py-3.5 text-xs font-bold uppercase tracking-widest transition-all ${
-                        tier.accent
-                          ? "bg-accent text-white hover:bg-accent-hover"
-                          : "bg-foreground text-white hover:bg-accent"
-                      }`}
-                    >
-                      Choose {tier.name}
-                    </Link>
-                  </div>
+                {/* Plan name */}
+                <div style={{
+                  fontSize: 11,
+                  fontWeight: 600,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: plan.featured ? "oklch(70% 0.018 75)" : "var(--color-muted)",
+                  marginBottom: 20,
+                }}>
+                  {plan.name}
                 </div>
-              </FadeInSection>
+
+                {/* Price */}
+                {plan.monthly ? (
+                  <div style={{
+                    fontFamily: "var(--font-serif), 'Iowan Old Style', Georgia, serif",
+                    fontSize: 56,
+                    fontWeight: 900,
+                    letterSpacing: "-0.04em",
+                    lineHeight: 1,
+                    color: plan.featured ? "var(--color-background)" : "var(--color-foreground)",
+                    marginBottom: 6,
+                  }}>
+                    <span style={{ fontFamily: "var(--font-sans), system-ui", fontSize: 20, fontWeight: 600, verticalAlign: "top", marginTop: 10, display: "inline-block" }}>£</span>
+                    {annual && plan.annual ? plan.annual : plan.monthly}
+                  </div>
+                ) : (
+                  <div style={{
+                    fontFamily: "var(--font-serif), 'Iowan Old Style', Georgia, serif",
+                    fontSize: 40,
+                    fontWeight: 900,
+                    letterSpacing: "-0.02em",
+                    lineHeight: 1,
+                    color: plan.featured ? "var(--color-background)" : "var(--color-foreground)",
+                    marginBottom: 6,
+                    paddingTop: 8,
+                    paddingBottom: 12,
+                  }}>
+                    Let&rsquo;s talk
+                  </div>
+                )}
+
+                <div style={{ fontSize: 13, color: plan.featured ? "oklch(60% 0.018 75)" : "var(--color-muted)", marginBottom: 8 }}>
+                  {plan.period}
+                </div>
+
+                <p style={{
+                  fontSize: 14,
+                  color: plan.featured ? "oklch(65% 0.018 75)" : "var(--color-muted)",
+                  lineHeight: 1.6,
+                  marginBottom: 28,
+                  paddingBottom: 28,
+                  borderBottom: `1px solid ${plan.featured ? "oklch(30% 0.024 58)" : "var(--color-border)"}`,
+                }}>
+                  {plan.desc}
+                </p>
+
+                {/* Features */}
+                <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 13, marginBottom: 32, flex: 1 }}>
+                  {plan.features.map((feat) => (
+                    <li key={feat.text} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 14, lineHeight: 1.45 }}>
+                      <span style={{
+                        display: "block",
+                        width: 16,
+                        height: 16,
+                        flexShrink: 0,
+                        marginTop: 1,
+                        borderRadius: "50%",
+                        background: feat.included
+                          ? "var(--color-accent)"
+                          : "var(--color-border)",
+                        backgroundImage: feat.included
+                          ? `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 8l2.5 2.5L12 5.5' stroke='white' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`
+                          : `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M5 8h6' stroke='%236B6B6B' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E")`,
+                        backgroundSize: "contain",
+                      }} />
+                      <span style={{ color: feat.included
+                        ? (plan.featured ? "oklch(82% 0.018 75)" : "var(--color-foreground)")
+                        : (plan.featured ? "oklch(42% 0.015 58)" : "var(--color-muted)")
+                      }}>
+                        {feat.text}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link href="/contact" className={plan.ctaClass} style={{ marginTop: "auto" }}>
+                  {plan.cta}
+                </Link>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Alternative Cost Comparison */}
-      <section className="py-20 md:py-32 bg-surface border-b border-border">
-        <div className="mx-auto max-w-[1200px] px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-            <div className="lg:col-span-5">
-              <FadeInSection>
-                <div className="space-y-6">
-                  <span className="text-xs font-bold text-accent tracking-widest uppercase block">
-                    Return on investment
+      {/* ══ COMPARISON TABLE (desktop only) ══ */}
+      <section className="compare-section" style={{ padding: "96px 0", background: "var(--color-surface)" }}>
+        <div className="wrap">
+          <div className="section-header" style={{ textAlign: "center" }}>
+            <p className="eyebrow" style={{ textAlign: "center" }}>Full Comparison</p>
+            <h2>What&rsquo;s included at each tier.</h2>
+          </div>
+          <div style={{ overflowX: "auto", border: "1px solid var(--color-border)", borderRadius: 12, overflow: "hidden" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
+              <thead>
+                <tr>
+                  <th style={{ background: "var(--color-foreground)", color: "var(--color-background)", padding: "16px 24px", textAlign: "left", fontFamily: "var(--font-serif), 'Iowan Old Style', Georgia, serif", fontSize: 15, letterSpacing: "-0.01em" }}>Feature</th>
+                  {["Starter", "Growth", "Enterprise"].map((h) => (
+                    <th key={h} style={{ background: "var(--color-foreground)", color: "var(--color-background)", padding: "16px 24px", fontWeight: 600, fontSize: 13, textAlign: "center" }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {compareRows.map((row, i) => (
+                  "section" in row ? (
+                    <tr key={i}>
+                      <td colSpan={4} style={{
+                        background: "var(--color-background)",
+                        fontSize: 11,
+                        fontWeight: 600,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        color: "var(--color-muted)",
+                        padding: "10px 24px 8px",
+                        borderBottom: "1px solid var(--color-border)",
+                      }}>
+                        {row.section}
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr key={i} style={{ borderBottom: "1px solid var(--color-border)" }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-background)")}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                    >
+                      <td style={{ padding: "16px 24px", fontWeight: 500, color: "var(--color-foreground)" }}>{row.feature}</td>
+                      <td style={{ padding: "16px 24px", textAlign: "center" }}><CellVal val={row.starter} /></td>
+                      <td style={{ padding: "16px 24px", textAlign: "center" }}><CellVal val={row.growth} /></td>
+                      <td style={{ padding: "16px 24px", textAlign: "center" }}><CellVal val={row.enterprise} /></td>
+                    </tr>
+                  )
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ FAQ ══ */}
+      <section style={{ padding: "96px 0" }}>
+        <div className="wrap">
+          <div className="section-header" style={{ textAlign: "center" }}>
+            <p className="eyebrow" style={{ textAlign: "center" }}>Questions</p>
+            <h2>Things people ask before they sign.</h2>
+          </div>
+          <div style={{ borderTop: "1px solid var(--color-border)" }}>
+            {faqs.map((faq, i) => (
+              <div key={i} style={{ borderBottom: "1px solid var(--color-border)" }}>
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    padding: "24px 0",
+                    cursor: "pointer",
+                    background: "none",
+                    border: "none",
+                    gap: 24,
+                    fontFamily: "var(--font-serif), 'Iowan Old Style', Georgia, serif",
+                    fontSize: 19,
+                    fontWeight: 700,
+                    color: "var(--color-foreground)",
+                    letterSpacing: "-0.01em",
+                    textAlign: "left",
+                  }}
+                >
+                  {faq.q}
+                  <span style={{
+                    width: 28,
+                    height: 28,
+                    flexShrink: 0,
+                    border: "1px solid var(--color-border)",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: openFaq === i ? "var(--color-foreground)" : "transparent",
+                    transition: "all 0.2s",
+                  }}>
+                    <svg
+                      width="14" height="14" viewBox="0 0 14 14" fill="none"
+                      style={{ transform: openFaq === i ? "rotate(45deg)" : "none", transition: "transform 0.2s" }}
+                    >
+                      <path d="M7 2v10M2 7h10"
+                        stroke={openFaq === i ? "var(--color-background)" : "var(--color-foreground)"}
+                        strokeWidth="1.6" strokeLinecap="round"
+                      />
+                    </svg>
                   </span>
-                  <h2 className="text-foreground tracking-tight">
-                    The true cost of <span className="italic text-accent">doing it yourself</span>.
-                  </h2>
-                  <p className="text-body text-base leading-relaxed">
-                    Setting up and maintaining an outbound email pipeline requires multiple software subscriptions, technical expertise, and daily oversight.
+                </button>
+                {openFaq === i && (
+                  <p style={{ paddingBottom: 24, fontSize: 15, color: "var(--color-muted)", lineHeight: 1.75, maxWidth: 620 }}>
+                    {faq.a}
                   </p>
-                  <p className="text-body text-base leading-relaxed">
-                    Leadhaus consolidates this entire stack into a single, managed service. You save on tool licensing, skip the learning curve, and protect your primary company domain from blacklists.
-                  </p>
-                </div>
-              </FadeInSection>
-            </div>
-
-            <div className="lg:col-span-7">
-              <FadeInSection delay={100}>
-                <div className="border border-border bg-background p-6 shadow-sm">
-                  <div className="border-b border-border pb-4 mb-4">
-                    <p className="text-xs font-bold uppercase tracking-wider text-foreground">Outbound Tool Licensing & Labor</p>
-                    <p className="text-xs text-body">Estimated monthly costs to match Leadhaus</p>
-                  </div>
-                  <div className="divide-y divide-border">
-                    {alternativeCosts.map((item, idx) => (
-                      <div key={idx} className="py-3 flex justify-between items-baseline gap-4 text-xs">
-                        <div>
-                          <p className="font-semibold text-foreground">{item.item}</p>
-                          <p className="text-xs text-body mt-0.5">{item.note}</p>
-                        </div>
-                        <p className="font-bold text-accent shrink-0">{item.cost}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-6 pt-6 border-t-2 border-dashed border-border flex justify-between items-baseline">
-                    <p className="text-xs font-bold text-foreground uppercase tracking-wider">Equivalent DIY Monthly Stack</p>
-                    <p className="text-lg font-extrabold text-accent">£150+ /mo + labor</p>
-                  </div>
-                </div>
-              </FadeInSection>
-            </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* What is not in the price */}
-      <section className="py-20 md:py-28 bg-background border-b border-border">
-        <div className="mx-auto max-w-[1200px] px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
-            <FadeInSection>
-              <div className="space-y-6">
-                <span className="text-xs font-bold text-accent tracking-widest uppercase block">
-                  Inclusions
-                </span>
-                <h2 className="text-foreground tracking-tight">
-                  What is <span className="italic text-accent">not</span> in the price.
-                </h2>
-                <div className="space-y-4 text-body text-base leading-relaxed">
-                  <p>
-                    There are no add ons. There are no surcharges for unsubscribed contacts the way Mailchimp bills them. There are no overage fees if your campaigns perform well and generate more responses than expected. The price you see is the price you pay every month.
-                  </p>
-                  <p>
-                    Your card is billed on the day you sign up and on the same date every month thereafter, or once for six months if you choose the upfront option. The minimum commitment is six months. After the minimum term, you may cancel at any time with thirty days notice.
-                  </p>
-                </div>
-              </div>
-            </FadeInSection>
-
-            <FadeInSection delay={100}>
-              <div className="space-y-6">
-                <span className="text-xs font-bold text-accent tracking-widest uppercase block">
-                  Refund policy
-                </span>
-                <h2 className="text-foreground tracking-tight">
-                  Fourteen day <span className="italic text-accent">cooling off</span> period.
-                </h2>
-                <p className="text-body text-base leading-relaxed">
-                  Under UK consumer law, you have fourteen days from the date of sign up to cancel and receive a full refund. After fourteen days, the six month minimum commitment applies.
-                </p>
-              </div>
-            </FadeInSection>
+      {/* ══ DARK CTA ══ */}
+      <section style={{ padding: "96px 0", background: "var(--color-foreground)" }}>
+        <div className="wrap">
+          <div className="cta-dark-inner">
+            <div>
+              <h2 style={{
+                fontFamily: "var(--font-serif), 'Iowan Old Style', Georgia, serif",
+                fontSize: "clamp(30px, 3.5vw, 50px)",
+                fontWeight: 700,
+                letterSpacing: "-0.02em",
+                lineHeight: 1.15,
+                color: "var(--color-background)",
+              }}>
+                Not sure which plan fits?
+              </h2>
+              <p style={{ marginTop: 12, fontSize: 16, color: "oklch(70% 0.018 75)", maxWidth: 420 }}>
+                Book a 30-minute call and we&rsquo;ll map out exactly what&rsquo;s right for your stage. No pressure, no generic deck — just an honest conversation about your pipeline.
+              </p>
+            </div>
+            <Link href="/contact" className="btn btn-warm btn-lg">Book a discovery call</Link>
           </div>
         </div>
       </section>
+
+      <style>{`
+        .pricing-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 24px;
+          align-items: start;
+        }
+        .cta-dark-inner {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 48px;
+          align-items: center;
+        }
+        @media (max-width: 900px) {
+          .pricing-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+          .compare-section { display: none; }
+          .cta-dark-inner { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 640px) {
+          .faq-q { font-size: 16px; }
+        }
+      `}</style>
     </div>
   );
 }

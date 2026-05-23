@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeadHaus — Book a Discovery Call</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    :root {
+      --bg:       oklch(96.5% 0.020 76);
+      --surface:  oklch(99%   0.008 76);
+      --fg:       oklch(17%   0.024 58);
+      --muted:    oklch(47%   0.020 58);
+      --border:   oklch(88%   0.018 76);
+      --accent:   oklch(59%   0.130 34);
+      --accent-bg: oklch(59%  0.130 34 / 0.10);
+      --display: 'Playfair Display', 'Iowan Old Style', Georgia, serif;
+      --body:    'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --max: 1200px; --sec: 96px; --r: 12px; --rsm: 8px;
+    }
+    body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 32px; }
+    @media (max-width: 640px) { .wrap { padding: 0 20px; } }
+
+    /* Nav */
+    nav { position: sticky; top: 0; z-index: 100; background: oklch(96.5% 0.020 76 / 0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+    .nav-row { max-width: var(--max); margin: 0 auto; padding: 0 32px; height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .logo { font-family: var(--display); font-size: 21px; font-weight: 700; letter-spacing: -0.02em; color: var(--fg); text-decoration: none; flex-shrink: 0; }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.18s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--fg); }
+
+    /* Buttons */
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: var(--rsm); font: 600 14px/1 var(--body); cursor: pointer; text-decoration: none; transition: all 0.18s; border: none; white-space: nowrap; }
+    .btn-dark { background: var(--fg); color: var(--bg); }
+    .btn-dark:hover { background: oklch(27% 0.024 58); }
+    .btn-warm { background: var(--accent); color: #fff; }
+    .btn-warm:hover { background: oklch(53% 0.130 34); }
+    .btn-lg { padding: 13px 28px; font-size: 15px; }
+    .btn-full { width: 100%; justify-content: center; }
+
+    /* Typography helpers */
+    .ew { font: 600 11px/1 var(--body); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+
+    /* Main layout */
+    .contact-page { padding: 80px 0 var(--sec); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 96px; align-items: start; }
+    @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; gap: 56px; } }
+
+    /* Left: copy & trust */
+    .contact-copy h1 {
+      font-family: var(--display); font-size: clamp(40px, 5vw, 60px);
+      font-weight: 900; line-height: 1.08; letter-spacing: -0.025em;
+      color: var(--fg); margin-bottom: 20px;
+    }
+    .contact-copy > p {
+      font-size: 17px; line-height: 1.7; color: var(--muted);
+      max-width: 400px; margin-bottom: 48px;
+    }
+
+    /* What to expect */
+    .expect-label { font: 600 11px/1 var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+    .expect-steps { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--border); }
+    .expect-step { display: grid; grid-template-columns: 28px 1fr; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--border); align-items: start; }
+    .expect-step-n { font: 700 12px/1 var(--display); color: var(--accent); padding-top: 3px; }
+    .expect-step h4 { font-size: 14px; font-weight: 600; color: var(--fg); margin-bottom: 4px; }
+    .expect-step p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* Trust signals */
+    .trust-strip { margin-top: 48px; display: flex; flex-direction: column; gap: 16px; }
+    .trust-item { display: flex; align-items: center; gap: 12px; }
+    .trust-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    .trust-item span { font-size: 14px; color: var(--muted); }
+
+    /* Contact details */
+    .contact-details { margin-top: 48px; padding-top: 48px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 14px; }
+    .contact-detail { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--muted); }
+    .contact-detail a { color: var(--muted); text-decoration: none; transition: color 0.18s; }
+    .contact-detail a:hover { color: var(--fg); }
+    .detail-icon { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    /* Right: form */
+    .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 48px 44px; }
+    @media (max-width: 640px) { .form-card { padding: 32px 24px; } }
+    .form-card h2 { font-family: var(--display); font-size: 26px; font-weight: 700; letter-spacing: -0.015em; color: var(--fg); margin-bottom: 6px; }
+    .form-card > p { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.6; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--fg); margin-bottom: 7px; letter-spacing: 0.01em; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%; padding: 11px 14px;
+      border: 1px solid var(--border); border-radius: var(--rsm);
+      background: var(--bg); color: var(--fg);
+      font: 400 14px/1.4 var(--body); outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+      -webkit-appearance: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-bg);
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--muted); }
+    .form-group textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } }
+    .form-note { font-size: 12px; color: var(--muted); text-align: center; margin-top: 14px; line-height: 1.6; }
+    .form-note a { color: var(--muted); text-decoration: underline; }
+
+    /* Success state */
+    .form-success {
+      display: none; text-align: center; padding: 32px 0;
+    }
+    .success-circle {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--accent-bg); border: 2px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px; font-size: 28px;
+    }
+    .form-success h3 { font-family: var(--display); font-size: 24px; font-weight: 700; color: var(--fg); margin-bottom: 10px; }
+    .form-success p { font-size: 15px; color: var(--muted); line-height: 1.65; }
+
+    /* Social proof bar */
+    .proof-bar { background: var(--fg); padding: 40px 0; }
+    .proof-inner { display: flex; justify-content: center; align-items: center; gap: 64px; flex-wrap: wrap; }
+    .proof-stat { text-align: center; }
+    .proof-stat-n { font-family: var(--display); font-size: 32px; font-weight: 900; color: var(--bg); letter-spacing: -0.04em; line-height: 1; }
+    .proof-stat-l { font-size: 12px; color: oklch(60% 0.018 75); margin-top: 5px; }
+    .proof-divider { width: 1px; height: 40px; background: oklch(30% 0.024 58); }
+    @media (max-width: 640px) { .proof-inner { gap: 32px; } .proof-divider { display: none; } }
+
+    /* Footer */
+    footer { background: var(--fg); padding: 0 0 32px; border-top: 1px solid oklch(30% 0.024 58); }
+    .foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding: 56px 0 48px; border-bottom: 1px solid oklch(30% 0.024 58); margin-bottom: 24px; }
+    .foot-brand .logo { color: var(--bg); display: block; margin-bottom: 12px; }
+    .foot-brand p { font-size: 13px; color: oklch(55% 0.018 58); max-width: 230px; line-height: 1.65; }
+    .foot-col h5 { font: 600 11px/1 var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: oklch(42% 0.012 58); margin-bottom: 14px; }
+    .foot-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .foot-col a { font-size: 14px; color: oklch(68% 0.018 75); text-decoration: none; transition: color 0.18s; }
+    .foot-col a:hover { color: var(--bg); }
+    .foot-bottom { display: flex; justify-content: space-between; font-size: 12px; color: oklch(40% 0.012 58); }
+    @media (max-width: 900px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px) { .foot-grid { grid-template-columns: 1fr; } .foot-bottom { flex-direction: column; gap: 6px; } }
+    @media (max-width: 768px) { .nav-links, .nav-cta { display: none; } }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-row">
+    <a href="index.html" class="logo">LeadHaus</a>
+    <ul class="nav-links">
+      <li><a href="how-it-works.html">How It Works</a></li>
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+    <a href="contact.html" class="btn btn-dark nav-cta">Get Started</a>
+  </div>
+</nav>
+
+<!-- CONTACT PAGE -->
+<section class="contact-page">
+  <div class="wrap">
+    <div class="contact-grid">
+
+      <!-- LEFT: copy + context -->
+      <div class="contact-copy">
+        <p class="ew">Discovery Call</p>
+        <h1>Let's talk about your pipeline.</h1>
+        <p>Book a 30-minute call. We'll come prepared with a view of your market, benchmark data for your industry, and a clear opinion on what's possible — no generic slides.</p>
+
+        <div class="expect-label">What to expect</div>
+        <div class="expect-steps">
+          <div class="expect-step">
+            <div class="expect-step-n">01</div>
+            <div>
+              <h4>We prep before you arrive</h4>
+              <p>We review your company, product, and competitive landscape before the call. You won't spend 10 minutes explaining what you do.</p>
+            </div>
+          </div>
+          <div class="expect-step">
+            <div class="expect-step-n">02</div>
+            <div>
+              <h4>An honest conversation about pipeline</h4>
+              <p>We'll map your current funnel, identify the gaps, and give you a frank view of what outbound can realistically deliver for your stage and market.</p>
+            </div>
+          </div>
+          <div class="expect-step">
+            <div class="expect-step-n">03</div>
+            <div>
+              <h4>A proposal within 24 hours</h4>
+              <p>If we're a fit, you'll receive a scoped proposal the following business day — with a recommended tier, projected meeting volume, and cost per meeting.</p>
+            </div>
+          </div>
+          <div class="expect-step">
+            <div class="expect-step-n">04</div>
+            <div>
+              <h4>No hard sell, ever</h4>
+              <p>We won't chase you after the call. If it's not right for you right now, we'll say so and tell you when to come back.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="trust-strip">
+          <div class="trust-item"><div class="trust-dot"></div><span>30-minute call — no obligation</span></div>
+          <div class="trust-item"><div class="trust-dot"></div><span>Proposal delivered in under 24 hours</span></div>
+          <div class="trust-item"><div class="trust-dot"></div><span>GDPR-compliant campaigns, always</span></div>
+          <div class="trust-item"><div class="trust-dot"></div><span>You own every asset we produce</span></div>
+        </div>
+
+        <div class="contact-details">
+          <div class="contact-detail">
+            <div class="detail-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3.5C2 2.67 2.67 2 3.5 2h7c.83 0 1.5.67 1.5 1.5v7c0 .83-.67 1.5-1.5 1.5h-7C2.67 12 2 11.33 2 10.5v-7Z" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 4.5l5 3.5 5-3.5" stroke="var(--muted)" stroke-width="1.2" stroke-linecap="round"/></svg>
+            </div>
+            <a href="mailto:hello@leadhaus.com">hello@leadhaus.com</a>
+          </div>
+          <div class="contact-detail">
+            <div class="detail-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10.5 8.98c-.48.47-1.9 1.52-3.5 0S4.55 5.98 4.55 5.98c-.48-.47-1.52-1.9 0-3.5L6 1.03c.2-.2.52-.2.72 0l2.28 2.28a.5.5 0 0 1 0 .71l-1.5 1.5s1.5 1.5 1.5 1.5l1.5-1.5a.5.5 0 0 1 .71 0l2.28 2.28c.2.2.2.52 0 .72L12 10c-1.6 1.52-3.02.47-3.5 0Z" stroke="var(--muted)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span>+44 (0)20 0000 0000</span>
+          </div>
+          <div class="contact-detail">
+            <div class="detail-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1a4 4 0 0 1 4 4c0 3-4 8-4 8S3 8 3 5a4 4 0 0 1 4-4Z" stroke="var(--muted)" stroke-width="1.2"/><circle cx="7" cy="5" r="1.2" stroke="var(--muted)" stroke-width="1.2"/></svg>
+            </div>
+            <span>London, United Kingdom</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: form -->
+      <div>
+        <div class="form-card" id="form-container">
+          <h2>Book a discovery call</h2>
+          <p>Fill in the details below and we'll confirm a time that works for you within one business day.</p>
+
+          <form id="contact-form" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="first-name">First name</label>
+                <input type="text" id="first-name" placeholder="James" required>
+              </div>
+              <div class="form-group">
+                <label for="last-name">Last name</label>
+                <input type="text" id="last-name" placeholder="Morrison" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Work email</label>
+              <input type="email" id="email" placeholder="james@company.com" required>
+            </div>
+            <div class="form-group">
+              <label for="company">Company</label>
+              <input type="text" id="company" placeholder="Acme Ltd" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="size">Team size</label>
+                <select id="size">
+                  <option value="">Select…</option>
+                  <option>1–10</option>
+                  <option>11–50</option>
+                  <option>51–200</option>
+                  <option>201–500</option>
+                  <option>500+</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="budget">Monthly budget</label>
+                <select id="budget">
+                  <option value="">Select…</option>
+                  <option>Under £2,000</option>
+                  <option>£2,000–£5,000</option>
+                  <option>£5,000–£10,000</option>
+                  <option>£10,000+</option>
+                  <option>Not sure yet</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="challenge">What's your biggest pipeline challenge right now?</label>
+              <textarea id="challenge" placeholder="e.g. We're generating leads but they're not converting, or we have no outbound process at all and need to build from scratch..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-warm btn-lg btn-full">Request a discovery call →</button>
+            <p class="form-note">We'll confirm within one business day. By submitting you agree to our <a href="#">Privacy Policy</a>.</p>
+          </form>
+
+          <div class="form-success" id="form-success">
+            <div class="success-circle">✓</div>
+            <h3>We'll be in touch shortly.</h3>
+            <p>Thanks for reaching out. One of our team will confirm your call within one business day — usually sooner.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROOF BAR -->
+<section class="proof-bar">
+  <div class="wrap">
+    <div class="proof-inner">
+      <div class="proof-stat">
+        <div class="proof-stat-n">250+</div>
+        <div class="proof-stat-l">B2B clients</div>
+      </div>
+      <div class="proof-divider"></div>
+      <div class="proof-stat">
+        <div class="proof-stat-n">2M+</div>
+        <div class="proof-stat-l">Qualified leads delivered</div>
+      </div>
+      <div class="proof-divider"></div>
+      <div class="proof-stat">
+        <div class="proof-stat-n">35%</div>
+        <div class="proof-stat-l">Avg. pipeline lift in 90 days</div>
+      </div>
+      <div class="proof-divider"></div>
+      <div class="proof-stat">
+        <div class="proof-stat-n">24h</div>
+        <div class="proof-stat-l">Proposal turnaround</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="index.html" class="logo">LeadHaus</a>
+        <p>Premium lead generation for established B2B companies ready to scale their pipeline without scaling their headcount.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="contact.html">About</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Product</h5>
+        <ul>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="contact.html">Case Studies</a></li>
+          <li><a href="how-it-works.html">Integrations</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Get in Touch</h5>
+        <ul>
+          <li><a href="contact.html">Book a Call</a></li>
+          <li><a href="mailto:hello@leadhaus.com">hello@leadhaus.com</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2025 LeadHaus. All rights reserved.</span>
+      <span>Privacy Policy · Terms of Service</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.getElementById('contact-form').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+    document.getElementById('form-container').querySelector('h2').style.display = 'none';
+    document.getElementById('form-container').querySelector('p').style.display = 'none';
+  });
+</script>
+
+</body>
+</html>

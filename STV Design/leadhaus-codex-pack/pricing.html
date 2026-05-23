@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeadHaus — Pricing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    :root {
+      --bg:       oklch(96.5% 0.020 76);
+      --surface:  oklch(99%   0.008 76);
+      --fg:       oklch(17%   0.024 58);
+      --muted:    oklch(47%   0.020 58);
+      --border:   oklch(88%   0.018 76);
+      --accent:   oklch(59%   0.130 34);
+      --accent-bg: oklch(59%  0.130 34 / 0.10);
+      --display: 'Playfair Display', 'Iowan Old Style', Georgia, serif;
+      --body:    'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --max: 1200px; --sec: 96px; --r: 12px; --rsm: 8px;
+    }
+    body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 32px; }
+    @media (max-width: 640px) { .wrap { padding: 0 20px; } }
+
+    /* Nav */
+    nav { position: sticky; top: 0; z-index: 100; background: oklch(96.5% 0.020 76 / 0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+    .nav-row { max-width: var(--max); margin: 0 auto; padding: 0 32px; height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .logo { font-family: var(--display); font-size: 21px; font-weight: 700; letter-spacing: -0.02em; color: var(--fg); text-decoration: none; flex-shrink: 0; }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.18s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--fg); }
+
+    /* Buttons */
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: var(--rsm); font: 600 14px/1 var(--body); cursor: pointer; text-decoration: none; transition: all 0.18s; border: none; white-space: nowrap; }
+    .btn-dark { background: var(--fg); color: var(--bg); }
+    .btn-dark:hover { background: oklch(27% 0.024 58); }
+    .btn-outline { background: transparent; color: var(--fg); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--muted); background: var(--accent-bg); }
+    .btn-warm { background: var(--accent); color: #fff; }
+    .btn-warm:hover { background: oklch(53% 0.130 34); }
+    .btn-lg { padding: 13px 28px; font-size: 15px; }
+    .btn-full { width: 100%; justify-content: center; }
+
+    /* Typography helpers */
+    .ew { font: 600 11px/1 var(--body); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+    .sh { margin-bottom: 56px; text-align: center; }
+    .sh h2 { font-family: var(--display); font-size: clamp(28px, 3vw, 44px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; color: var(--fg); }
+    .sh p { margin-top: 14px; font-size: 17px; color: var(--muted); max-width: 520px; margin-left: auto; margin-right: auto; line-height: 1.65; }
+
+    /* Page hero */
+    .page-hero { padding: 80px 0 96px; text-align: center; }
+    .page-hero h1 { font-family: var(--display); font-size: clamp(44px, 6vw, 72px); font-weight: 900; line-height: 1.06; letter-spacing: -0.025em; color: var(--fg); margin-bottom: 20px; }
+    .page-hero p { font-size: 18px; line-height: 1.65; color: var(--muted); max-width: 480px; margin: 0 auto 36px; }
+
+    /* Toggle */
+    .toggle-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 56px; }
+    .toggle-label { font-size: 14px; font-weight: 500; color: var(--muted); }
+    .toggle-label.active { color: var(--fg); }
+    .toggle { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-track { position: absolute; inset: 0; background: var(--border); border-radius: 24px; cursor: pointer; transition: background 0.2s; }
+    .toggle input:checked + .toggle-track { background: var(--accent); }
+    .toggle-track::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: transform 0.2s; }
+    .toggle input:checked + .toggle-track::before { transform: translateX(20px); }
+    .save-badge { font: 600 11px/1 var(--body); letter-spacing: 0.08em; text-transform: uppercase; background: var(--accent-bg); color: var(--accent); border-radius: 4px; padding: 3px 8px; }
+
+    /* Pricing cards */
+    .pricing-section { padding: 0 0 var(--sec); }
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: start; }
+    .plan {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 40px 36px;
+      display: flex; flex-direction: column; gap: 0;
+      transition: box-shadow 0.2s;
+    }
+    .plan:hover { box-shadow: 0 4px 24px oklch(17% 0.024 58 / 0.08); }
+    .plan.featured {
+      background: var(--fg);
+      border-color: var(--fg);
+      position: relative;
+    }
+    .plan-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--accent); color: #fff;
+      font: 600 11px/1 var(--body); letter-spacing: 0.10em; text-transform: uppercase;
+      padding: 5px 14px; border-radius: 20px; white-space: nowrap;
+    }
+    .plan-name {
+      font: 600 11px/1 var(--body); letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 20px;
+    }
+    .plan.featured .plan-name { color: oklch(70% 0.018 75); }
+    .plan-price {
+      font-family: var(--display); font-size: 56px; font-weight: 900;
+      letter-spacing: -0.04em; line-height: 1; color: var(--fg); margin-bottom: 6px;
+    }
+    .plan.featured .plan-price { color: var(--bg); }
+    .plan-price span { font-family: var(--body); font-size: 20px; font-weight: 600; vertical-align: top; margin-top: 10px; display: inline-block; }
+    .plan-period { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+    .plan.featured .plan-period { color: oklch(60% 0.018 75); }
+    .plan-desc { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--border); }
+    .plan.featured .plan-desc { color: oklch(65% 0.018 75); border-bottom-color: oklch(30% 0.024 58); }
+    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 13px; margin-bottom: 32px; flex: 1; }
+    .plan-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--fg); line-height: 1.45; }
+    .plan.featured .plan-features li { color: oklch(82% 0.018 75); }
+    .plan-features li::before { content: ''; display: block; width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; background: var(--accent); border-radius: 50%; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 8l2.5 2.5L12 5.5' stroke='white' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-size: contain; }
+    .plan-features li.muted-feat { color: var(--muted); }
+    .plan-features li.muted-feat::before { background-color: var(--border); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M5 8h6' stroke='%236B6B6B' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E"); }
+    .plan.featured .plan-features li.muted-feat { color: oklch(42% 0.015 58); }
+    @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; } }
+
+    /* Comparison table */
+    .compare { padding: var(--sec) 0; background: var(--surface); }
+    .compare-table { width: 100%; border-collapse: collapse; border-radius: var(--r); overflow: hidden; border: 1px solid var(--border); }
+    .compare-table th, .compare-table td { text-align: left; padding: 16px 24px; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .compare-table thead th { background: var(--fg); color: var(--bg); font-weight: 600; font-size: 13px; letter-spacing: 0.04em; }
+    .compare-table thead th:first-child { font-family: var(--display); font-size: 15px; letter-spacing: -0.01em; }
+    .compare-table tbody tr:last-child td { border-bottom: none; }
+    .compare-table tbody tr:hover td { background: var(--bg); }
+    .compare-table tbody td:first-child { font-weight: 500; color: var(--fg); }
+    .compare-table tbody td:not(:first-child) { color: var(--muted); text-align: center; }
+    .check { color: var(--accent); font-size: 17px; }
+    .dash { color: var(--border); font-size: 18px; }
+    .compare-table .section-row td { background: var(--bg); font: 600 11px/1 var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 10px 24px 8px; border-bottom-color: var(--border); }
+    @media (max-width: 768px) { .compare { display: none; } }
+
+    /* FAQ */
+    .faq { padding: var(--sec) 0; }
+    .faq-list { display: flex; flex-direction: column; border-top: 1px solid var(--border); }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-q {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 24px 0; cursor: pointer; gap: 24px;
+      font-family: var(--display); font-size: 19px; font-weight: 700;
+      color: var(--fg); letter-spacing: -0.01em; list-style: none;
+      user-select: none;
+    }
+    .faq-q::-webkit-details-marker { display: none; }
+    .faq-icon { width: 28px; height: 28px; flex-shrink: 0; border: 1px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .faq-icon svg { transition: transform 0.2s; }
+    details[open] .faq-icon { background: var(--fg); border-color: var(--fg); }
+    details[open] .faq-icon svg { transform: rotate(45deg); }
+    details[open] .faq-icon svg path { stroke: var(--bg); }
+    .faq-a { padding: 0 48px 24px 0; font-size: 15px; color: var(--muted); line-height: 1.75; max-width: 620px; }
+    @media (max-width: 640px) { .faq-q { font-size: 16px; } .faq-a { padding-right: 0; } }
+
+    /* CTA dark */
+    .cta-dark { padding: var(--sec) 0; background: var(--fg); }
+    .cta-dark-inner { display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center; }
+    .cta-dark h2 { font-family: var(--display); font-size: clamp(30px, 3.5vw, 50px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; color: var(--bg); }
+    .cta-dark p { margin-top: 12px; font-size: 16px; color: oklch(70% 0.018 75); max-width: 420px; }
+    @media (max-width: 768px) { .cta-dark-inner { grid-template-columns: 1fr; } }
+
+    /* Footer */
+    footer { background: var(--fg); padding: 0 0 32px; border-top: 1px solid oklch(30% 0.024 58); }
+    .foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding: 56px 0 48px; border-bottom: 1px solid oklch(30% 0.024 58); margin-bottom: 24px; }
+    .foot-brand .logo { color: var(--bg); display: block; margin-bottom: 12px; }
+    .foot-brand p { font-size: 13px; color: oklch(55% 0.018 58); max-width: 230px; line-height: 1.65; }
+    .foot-col h5 { font: 600 11px/1 var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: oklch(42% 0.012 58); margin-bottom: 14px; }
+    .foot-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .foot-col a { font-size: 14px; color: oklch(68% 0.018 75); text-decoration: none; transition: color 0.18s; }
+    .foot-col a:hover { color: var(--bg); }
+    .foot-bottom { display: flex; justify-content: space-between; font-size: 12px; color: oklch(40% 0.012 58); }
+    @media (max-width: 900px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px) { .foot-grid { grid-template-columns: 1fr; } .foot-bottom { flex-direction: column; gap: 6px; } }
+    @media (max-width: 768px) { .nav-links, .nav-cta { display: none; } }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-row">
+    <a href="index.html" class="logo">LeadHaus</a>
+    <ul class="nav-links">
+      <li><a href="how-it-works.html">How It Works</a></li>
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="pricing.html" class="active">Pricing</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a href="contact.html" class="btn btn-dark nav-cta">Get Started</a>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="wrap">
+    <p class="ew">Pricing</p>
+    <h1>Transparent pricing.<br>Real results.</h1>
+    <p>No retainer traps. No hidden minimums. Three tiers built for where you are now — upgrade as your pipeline scales.</p>
+
+    <!-- Toggle -->
+    <div class="toggle-wrap">
+      <span class="toggle-label active" id="lbl-monthly">Monthly</span>
+      <label class="toggle">
+        <input type="checkbox" id="billing-toggle">
+        <div class="toggle-track"></div>
+      </label>
+      <span class="toggle-label" id="lbl-annual">Annual <span class="save-badge">Save 15%</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING CARDS -->
+<section class="pricing-section">
+  <div class="wrap">
+    <div class="pricing-grid">
+
+      <!-- Starter -->
+      <div class="plan">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price"><span>£</span><span class="price-val" data-monthly="2,400" data-annual="2,040">2,400</span></div>
+        <div class="plan-period">per month + performance</div>
+        <p class="plan-desc">For companies who want to test outbound before committing to scale. A fully managed pilot that delivers real meetings — not promises.</p>
+        <ul class="plan-features">
+          <li>ICP definition & list build (up to 500 contacts/mo)</li>
+          <li>Email + LinkedIn outreach sequences</li>
+          <li>Dedicated account manager</li>
+          <li>Monthly reporting call</li>
+          <li>CRM integration (HubSpot or Salesforce)</li>
+          <li>Qualified meeting briefing notes</li>
+          <li class="muted-feat">Phone outreach</li>
+          <li class="muted-feat">A/B copy testing</li>
+          <li class="muted-feat">Live pipeline dashboard</li>
+        </ul>
+        <a href="contact.html" class="btn btn-outline btn-full">Book a call</a>
+      </div>
+
+      <!-- Growth — featured -->
+      <div class="plan featured">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-name">Growth</div>
+        <div class="plan-price"><span>£</span><span class="price-val" data-monthly="4,800" data-annual="4,080">4,800</span></div>
+        <div class="plan-period">per month + performance</div>
+        <p class="plan-desc">For established teams ready to build a consistent, scalable pipeline. Full multi-channel execution with weekly reporting and live data.</p>
+        <ul class="plan-features">
+          <li>ICP definition & list build (up to 1,500 contacts/mo)</li>
+          <li>Email + LinkedIn + phone sequences</li>
+          <li>Senior account manager (≥5 years experience)</li>
+          <li>Weekly strategy call</li>
+          <li>CRM integration (all major platforms)</li>
+          <li>Qualified meeting briefing notes</li>
+          <li>A/B copy testing — unlimited variants</li>
+          <li>Live pipeline dashboard</li>
+          <li>Reply handling & objection management</li>
+        </ul>
+        <a href="contact.html" class="btn btn-warm btn-full btn-lg">Book a call</a>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="plan">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price" style="font-size: 40px; padding-top: 8px; padding-bottom: 12px;">Let's talk</div>
+        <div class="plan-period">custom scope + SLA</div>
+        <p class="plan-desc">For companies that need dedicated team capacity, multi-territory outreach, or deep integration with existing revenue operations.</p>
+        <ul class="plan-features">
+          <li>Unlimited contacts & territory scope</li>
+          <li>Dedicated pod (SDR + strategist + data analyst)</li>
+          <li>All Growth features, plus:</li>
+          <li>Multi-territory & multilingual campaigns</li>
+          <li>RevOps consulting & CRM build-out</li>
+          <li>Executive-level stakeholder reporting</li>
+          <li>Guaranteed meeting SLA</li>
+          <li>Quarterly pipeline review with your board</li>
+          <li>White-labelling available</li>
+        </ul>
+        <a href="contact.html" class="btn btn-dark btn-full">Talk to sales</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section class="compare">
+  <div class="wrap">
+    <div class="sh">
+      <p class="ew">Full Comparison</p>
+      <h2>What's included at each tier.</h2>
+    </div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Starter</th>
+          <th>Growth</th>
+          <th>Enterprise</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-row"><td colspan="4">Outreach channels</td></tr>
+        <tr><td>Email sequences</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>LinkedIn outreach</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Phone / cold calling</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Multilingual campaigns</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+
+        <tr class="section-row"><td colspan="4">Data & targeting</td></tr>
+        <tr><td>Contacts built per month</td><td>Up to 500</td><td>Up to 1,500</td><td>Unlimited</td></tr>
+        <tr><td>ICP mapping session</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Trigger-event targeting</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>GDPR-compliant verification</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+
+        <tr class="section-row"><td colspan="4">Reporting</td></tr>
+        <tr><td>Monthly reporting call</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Weekly strategy call</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Live pipeline dashboard</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Executive board reporting</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+
+        <tr class="section-row"><td colspan="4">Team & support</td></tr>
+        <tr><td>Account manager</td><td>Dedicated</td><td>Senior (5+ yrs)</td><td>Dedicated pod</td></tr>
+        <tr><td>A/B copy testing</td><td class="dash">—</td><td>Unlimited</td><td>Unlimited</td></tr>
+        <tr><td>Reply handling</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Guaranteed meeting SLA</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="wrap">
+    <div class="sh">
+      <p class="ew">Questions</p>
+      <h2>Things people ask before they sign.</h2>
+    </div>
+    <div class="faq-list">
+
+      <details class="faq-item">
+        <summary class="faq-q">
+          How does the performance component work?
+          <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="var(--fg)" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        </summary>
+        <p class="faq-a">On top of the monthly retainer, we charge a small fee per qualified meeting delivered — typically £150–£300 depending on deal size and industry. This means our incentives are directly tied to yours. We don't earn more by sending more emails; we earn more by filling your calendar with the right conversations.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">
+          What counts as a "qualified" meeting?
+          <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="var(--fg)" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        </summary>
+        <p class="faq-a">We agree a qualification criteria with you during onboarding — typically seniority, company size, budget authority, and timeline. A meeting only counts if the prospect meets all agreed criteria and the meeting actually occurs. No-shows and declined meetings don't count toward your performance fees.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">
+          How long until I see my first meetings?
+          <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="var(--fg)" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        </summary>
+        <p class="faq-a">Most clients see their first qualified meetings in weeks two or three. Week one is onboarding, ICP mapping, and list build. Sequences go live in week two. Results vary by industry, deal size, and how tight your ICP is — but we typically aim to cover your retainer cost in qualified pipeline value within the first 30 days.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">
+          Is there a minimum contract length?
+          <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="var(--fg)" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        </summary>
+        <p class="faq-a">Starter is available month-to-month with 30 days' notice. Growth requires a 3-month minimum — it takes that long to properly tune messaging and ICP. Enterprise terms are negotiated as part of the engagement. We've never had a client leave because results weren't there; most upgrade instead.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">
+          Can you work with our existing CRM and tech stack?
+          <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="var(--fg)" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        </summary>
+        <p class="faq-a">Yes. We integrate with Salesforce, HubSpot, Pipedrive, Outreach, Salesloft, and most other major CRMs and sequencing tools via native integrations or Zapier. Every lead is automatically logged with full activity context — you'll never be chasing data from us. Growth and Enterprise tiers include integration setup at no extra cost.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">
+          Do I own the contacts and data you build?
+          <div class="faq-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="var(--fg)" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        </summary>
+        <p class="faq-a">Completely. Every contact list, every message thread, every campaign asset is yours from day one. When an engagement ends, we export everything and hand it over in full. We document our process so your internal team — or any future agency — can pick it up and keep running it. We build systems, not dependencies.</p>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA DARK -->
+<section class="cta-dark">
+  <div class="wrap">
+    <div class="cta-dark-inner">
+      <div>
+        <h2>Not sure which plan fits?</h2>
+        <p>Book a 30-minute call and we'll map out exactly what's right for your stage. No pressure, no generic deck — just an honest conversation about your pipeline.</p>
+      </div>
+      <a href="contact.html" class="btn btn-warm btn-lg">Book a discovery call</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="index.html" class="logo">LeadHaus</a>
+        <p>Premium lead generation for established B2B companies ready to scale their pipeline without scaling their headcount.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="contact.html">About</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Product</h5>
+        <ul>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="contact.html">Case Studies</a></li>
+          <li><a href="how-it-works.html">Integrations</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Get in Touch</h5>
+        <ul>
+          <li><a href="contact.html">Book a Call</a></li>
+          <li><a href="mailto:hello@leadhaus.com">hello@leadhaus.com</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2025 LeadHaus. All rights reserved.</span>
+      <span>Privacy Policy · Terms of Service</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('billing-toggle');
+  const lblM = document.getElementById('lbl-monthly');
+  const lblA = document.getElementById('lbl-annual');
+  const vals = document.querySelectorAll('.price-val');
+
+  toggle.addEventListener('change', () => {
+    const annual = toggle.checked;
+    lblM.classList.toggle('active', !annual);
+    lblA.classList.toggle('active', annual);
+    vals.forEach(v => {
+      v.textContent = annual ? v.dataset.annual : v.dataset.monthly;
+    });
+  });
+</script>
+
+</body>
+</html>
