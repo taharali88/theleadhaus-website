@@ -13,6 +13,14 @@ const footerCols = [
     ],
   },
   {
+    heading: "Comparisons",
+    links: [
+      { href: "/comparison/leadhaus-vs-mailchimp", label: "Leadhaus vs Mailchimp" },
+      { href: "/comparison/leadhaus-vs-smartlead", label: "Leadhaus vs Smartlead" },
+      { href: "/comparison/leadhaus-vs-lemlist",   label: "Leadhaus vs Lemlist" },
+    ],
+  },
+  {
     heading: "Legal",
     links: [
       { href: "/privacy", label: "Privacy Policy" },

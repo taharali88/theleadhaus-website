@@ -4,12 +4,12 @@ import Link from "next/link";
 import { Reveal, ScaleIn } from "@/components/Motion";
 
 const comparisonRows = [
-  { feature: "Provides fresh leads",                  lh: "Yes", mc: "No",  ml: "No",  br: "No",      eo: "No",  negative: false },
-  { feature: "Sends the outreach for you",             lh: "Yes", mc: "No",  ml: "No",  br: "No",      eo: "No",  negative: false },
-  { feature: "Plain English reporting",                lh: "Yes", mc: "No",  ml: "No",  br: "No",      eo: "No",  negative: false },
-  { feature: "Charges per contact",                   lh: "No",  mc: "Yes", ml: "Yes", br: "Partial", eo: "Yes", negative: true  },
-  { feature: "Hidden fees for unsubscribed contacts", lh: "No",  mc: "Yes", ml: "No",  br: "No",      eo: "No",  negative: true  },
-  { feature: "Bring your own list required",          lh: "No",  mc: "Yes", ml: "Yes", br: "Yes",     eo: "Yes", negative: true  },
+  { feature: "Live custom sourced leads",             lh: "Yes", sl: "No",  ll: "No",  mc: "No",  negative: false },
+  { feature: "Outreach sent on your behalf",          lh: "Yes", sl: "No",  ll: "No",  mc: "No",  negative: false },
+  { feature: "No technical setup or DNS config",      lh: "Yes", sl: "No",  ll: "No",  mc: "No",  negative: false },
+  { feature: "No sending software to manage",         lh: "Yes", sl: "No",  ll: "No",  mc: "No",  negative: false },
+  { feature: "Weekly plain English reports",          lh: "Yes", sl: "No",  ll: "No",  mc: "No",  negative: false },
+  { feature: "No seat fees for team members",         lh: "Yes", sl: "Yes", ll: "No",  mc: "Yes", negative: false },
 ];
 
 const GREEN = "oklch(59% 0.130 34)"; // rust/accent for positive
@@ -384,7 +384,7 @@ export default function HomePage() {
                 <thead>
                   <tr>
                     <th style={{ background: "var(--color-foreground)", color: "var(--color-background)", padding: "16px 24px", fontWeight: 600, fontSize: 13 }}>Feature</th>
-                    {["Leadhaus", "Mailchimp", "MailerLite", "Brevo", "EmailOctopus"].map((h, i) => (
+                    {["Leadhaus", "Smartlead", "Lemlist", "Mailchimp"].map((h, i) => (
                       <th key={h} style={{
                         background: "var(--color-foreground)",
                         color: i === 0 ? "var(--color-accent)" : "var(--color-background)",
@@ -401,25 +401,23 @@ export default function HomePage() {
                     <tr key={i} className="compare-row" style={{ borderBottom: "1px solid var(--color-border)", background: "var(--color-surface)" }}>
                       <td style={{ padding: "14px 24px", fontWeight: 500, color: "var(--color-foreground)" }}>{row.feature}</td>
                       <td style={{ padding: "14px 24px", textAlign: "center", background: "oklch(59% 0.130 34 / 0.03)", fontWeight: 700 }}>{checkCell(row.lh, true,  row.negative)}</td>
+                      <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkCell(row.sl, false, row.negative)}</td>
+                      <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkCell(row.ll, false, row.negative)}</td>
                       <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkCell(row.mc, false, row.negative)}</td>
-                      <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkCell(row.ml, false, row.negative)}</td>
-                      <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkCell(row.br, false, row.negative)}</td>
-                      <td style={{ padding: "14px 24px", textAlign: "center" }}>{checkCell(row.eo, false, row.negative)}</td>
                     </tr>
                   ))}
                   <tr style={{ background: "var(--color-background)", fontWeight: 600 }}>
-                    <td style={{ padding: "14px 24px", color: "var(--color-foreground)" }}>Starting monthly price for 25,000 contacts</td>
+                    <td style={{ padding: "14px 24px", color: "var(--color-foreground)" }}>Starting monthly price</td>
                     <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-accent)", background: "oklch(59% 0.130 34 / 0.03)" }}>£497</td>
-                    <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-muted)" }}>$270</td>
-                    <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-muted)" }}>$145</td>
-                    <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-muted)" }}>$69 to $499</td>
-                    <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-muted)" }}>$36</td>
+                    <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-muted)" }}>From $39</td>
+                    <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-muted)" }}>From $59</td>
+                    <td style={{ padding: "14px 24px", textAlign: "center", color: "var(--color-muted)" }}>From $350</td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <p style={{ marginTop: 16, fontSize: 12, color: "var(--color-muted)", lineHeight: 1.65, maxWidth: 720 }}>
-              Prices for competitors verified April 2026 from each provider&rsquo;s published rates. They charge less for sending alone because that is all they do. Leadhaus includes the lead generation, the sending, and the reporting as one fixed price.
+              Prices for competitors verified April 2026. While software tools like Smartlead and Lemlist appear cheaper, they are self service engines. You must purchase separate sending domains, configure email servers, pay list providers, and run the system yourself. Leadhaus includes the lead sourcing, infrastructure setup, copywriting, and daily management in one fixed monthly price.
             </p>
           </Reveal>
         </div>
