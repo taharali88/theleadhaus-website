@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@theme inline {
+@theme {
   /* ── LeadHaus Brand Tokens ── */
   --color-background:  oklch(96.5% 0.020 76);   /* warm cream #F6F3EE */
   --color-surface:     oklch(99%   0.008 76);   /* near-white #FDFCFB */
