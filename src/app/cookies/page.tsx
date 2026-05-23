@@ -94,7 +94,7 @@ export default function CookiesPage() {
               <p className="mt-3">
                 Our contact page includes a Calendly booking widget. Calendly
                 may set cookies when you interact with the booking form. You can
-                review Calendly's cookie policy on their website.
+                review Calendly&rsquo;s cookie policy on their website.
               </p>
             </div>
 

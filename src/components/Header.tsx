@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 
 const navLinks = [
@@ -14,9 +14,6 @@ const navLinks = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-
-  // Close mobile menu on route change
-  useEffect(() => { setOpen(false); }, [pathname]);
 
   const isActive = (href: string) => {
     if (href === "/#services") return false;

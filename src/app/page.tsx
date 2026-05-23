@@ -359,7 +359,7 @@ export default function HomePage() {
               </table>
             </div>
             <p style={{ marginTop: 16, fontSize: 12, color: "var(--color-muted)", lineHeight: 1.65, maxWidth: 720 }}>
-              Prices for competitors verified April 2026 from each provider's published rates. They charge less for sending alone because that is all they do. LeadHaus includes the lead generation, the sending, and the reporting as one fixed price.
+              Prices for competitors verified April 2026 from each provider&rsquo;s published rates. They charge less for sending alone because that is all they do. LeadHaus includes the lead generation, the sending, and the reporting as one fixed price.
             </p>
           </Reveal>
         </div>

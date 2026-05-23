@@ -68,7 +68,7 @@ export default function TermsPage() {
                 in the UK have the right to cancel within fourteen days of sign
                 up and receive a full refund. The right to cancel does not apply
                 to services that have been fully performed or where lead
-                generation activity has been completed at the customer's request
+                generation activity has been completed at the customer&rsquo;s request
                 within the fourteen day window.
               </p>
             </div>
@@ -93,7 +93,7 @@ export default function TermsPage() {
                 6. Lead ownership
               </h2>
               <p>
-                All contact data generated for the customer's account becomes
+                All contact data generated for the customer&rsquo;s account becomes
                 the property of the customer. On cancellation, the customer
                 receives a full export of their database in CSV format within
                 seven working days of cancellation taking effect.
@@ -134,7 +134,7 @@ export default function TermsPage() {
               <p>
                 Leadhaus does not guarantee specific numbers of replies,
                 bookings, or sales. Lead generation outcomes depend on the
-                customer's offer, market, pricing, and follow up. We commit to
+                customer&rsquo;s offer, market, pricing, and follow up. We commit to
                 the volume of contacts and outreach activity stated in each
                 plan, not to commercial outcomes.
               </p>
@@ -167,7 +167,7 @@ export default function TermsPage() {
                 10. Data protection
               </h2>
               <p>
-                Leadhaus is registered with the UK Information Commissioner's
+                Leadhaus is registered with the UK Information Commissioner&rsquo;s
                 Office and operates in compliance with UK GDPR. Full data
                 handling practices are set out in the Privacy Policy.
               </p>
